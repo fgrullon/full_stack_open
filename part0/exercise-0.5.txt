@@ -1,0 +1,18 @@
+sequenceDiagram
+title 0.5: Single page app
+
+Browser->>Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+Server->>Browser: HTML code for single-page application
+Browser->>Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+Server->>Browser: main.css
+Browser->>Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+Server->>Browser: spa.js
+
+
+
+Note over Browser:  Browser executes Ajax request to <br /> fetch the list of notes in the database
+
+Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+Server->>Browser: [{ Object }, ...]
+
+Note over Browser:  Browser diplay the notes <br /> 

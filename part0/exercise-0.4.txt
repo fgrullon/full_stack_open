@@ -1,0 +1,24 @@
+sequenceDiagram
+title 0.4 New note
+
+User->>Browser: User writes a new<br /> note and click "Save"
+
+Browser->>Server: HTTP POST http://fullstack-exampleapp.herokuapp.com/new_note
+Note right of Browser: Server recieve post <br />request to store note to database
+
+Server->>Browser: URL redirect to https://fullstack-exampleapp.herokuapp.com/notes
+Note right of Browser: Server response with a 302 status request <br /> that tellls the browser to reload the current pages '/notes'
+
+Browser->>Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+Server->>Browser: HTML code
+Browser->>Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+Server->>Browser: main.css
+Browser->>Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+Server->>Browser: main.js
+
+Note over Browser:  Browser executes Ajax request to <br /> fetch the list of notes in the database
+
+Browser->>Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+Server->>Browser: [{ Object }, ...]
+
+Note over Browser:  Browser diplay the notes <br /> 

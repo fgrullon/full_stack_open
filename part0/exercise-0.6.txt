@@ -1,0 +1,11 @@
+sequenceDiagram
+title 0.6 New note in Single Page App
+
+User->>Browser: User writes a new<br /> note and click "Save"
+
+Browser->>Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+Note right of Browser: Server recieve post <br />request to store note to database
+
+Server->>Browser: Server response with a 201 status request <br /> that indicates a new note was created
+
+
