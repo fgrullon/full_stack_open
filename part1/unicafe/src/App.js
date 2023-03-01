@@ -19,14 +19,17 @@ const Statistics = ({ good, neutral, bad }) => {
   const positive = (good / all) * 100;
  if(all > 0) {
   return (
-    <>
+    <table>
+      <tbody>
       <StatisticLine title="good" value={good}/>
       <StatisticLine title="neutral" value={neutral}/>
       <StatisticLine title="bad" value={bad}/>
       <StatisticLine title="all" value={all}/>
       <StatisticLine title="average" value={average}/>
       <StatisticLine title="positive" value={positive+' %'}/>
-    </>
+      </tbody>
+    </table>
+
   );
  }else{
   return (
@@ -38,8 +41,11 @@ const Statistics = ({ good, neutral, bad }) => {
 
 const StatisticLine = ({ title, value }) => {
   return (
-    <p>{ title } { value }</p>
-);
+    <tr>
+      <td>{ title } </td>
+      <td>{ value }</td>
+    </tr> 
+  );
 }
 const App = () => {
 
