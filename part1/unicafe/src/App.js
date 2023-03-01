@@ -20,12 +20,12 @@ const Statistics = ({ good, neutral, bad }) => {
  if(all > 0) {
   return (
     <>
-      <Stats title="good" total={good}/>
-      <Stats title="neutral" total={neutral}/>
-      <Stats title="bad" total={bad}/>
-      <Stats title="all" total={all}/>
-      <Stats title="average" total={average}/>
-      <Stats title="positive" total={positive+' %'}/>
+      <StatisticLine title="good" value={good}/>
+      <StatisticLine title="neutral" value={neutral}/>
+      <StatisticLine title="bad" value={bad}/>
+      <StatisticLine title="all" value={all}/>
+      <StatisticLine title="average" value={average}/>
+      <StatisticLine title="positive" value={positive+' %'}/>
     </>
   );
  }else{
@@ -36,9 +36,9 @@ const Statistics = ({ good, neutral, bad }) => {
 
 }
 
-const Stats = ({ title, total }) => {
+const StatisticLine = ({ title, value }) => {
   return (
-    <p>{ title } { total }</p>
+    <p>{ title } { value }</p>
 );
 }
 const App = () => {
