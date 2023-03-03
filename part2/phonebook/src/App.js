@@ -18,8 +18,11 @@ const App = () => {
   
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (persons.filter(e => e.name === newName).length > 0) {
+      alert(`${newName} is already added to phonebook`);
+      return ;
+    }
     setPersons(persons.concat({name : newName}));
-    console.log(persons)
   }
   return (
     <div>
