@@ -3,6 +3,7 @@ import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import PersonFilter from './components/PersonFilter';
 import person from './services/persons';
+import Notification from './components/Notification';
 
 const App = () => {
   // const [persons, setPersons] = useState([{name : 'Arto Hellas'}]);
@@ -12,7 +13,7 @@ const App = () => {
   
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState();
-  
+  const [message, setMessage] = useState(null);
   const handleSubmit = (event) => {
     event.preventDefault();
     const match = persons.filter(e => e.name === newName);
@@ -23,6 +24,11 @@ const App = () => {
         const newPersons = persons.map(p => p.id !== match[0].id ? p : data);
         setPersons(newPersons);
         setfilteredPersons(newPersons);
+
+        setMessage(`${match[0].name} Updated`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       });
     }else {
 
@@ -30,6 +36,10 @@ const App = () => {
         const newPersons = persons.concat(data)
         setPersons(newPersons);
         setfilteredPersons(newPersons);
+        setMessage(`Added ${data.name}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       });
     }
     
@@ -59,7 +69,7 @@ const App = () => {
   return (
     <div>
       <h2>PhoneBook</h2>
-   
+      <Notification message={message} />
       <PersonFilter
         handleFilter={handleFilter}
       />
