@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import PersonFilter from './components/PersonFilter';
-import axios from 'axios';
-
+import person from './services/persons';
 
 const App = () => {
   // const [persons, setPersons] = useState([{name : 'Arto Hellas'}]);
@@ -20,15 +19,14 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
       return ;
     }
-    const newPerson = {name : newName, number : newNumber}
 
-    axios.post(`http://localhost:3001/persons`, newPerson).then(response => {
-      const newPersons = persons.concat(response.data);
-
+    person.create({name : newName, number : newNumber}).then(data => {
+      const newPersons = persons.concat(data)
       setPersons(newPersons);
       setfilteredPersons(newPersons);
+    });
 
-    })
+    
   }
 
   const handleFilter = (event) => {
@@ -38,11 +36,12 @@ const App = () => {
   }
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-         .then(response => {
-            setPersons(response.data);
-            setfilteredPersons(response.data);
-         });
+    person.getAll().then(data => {
+      setPersons(data);
+      setfilteredPersons(data);
+    });
+
+
   }, []);
 
   return (
