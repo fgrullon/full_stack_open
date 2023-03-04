@@ -15,17 +15,23 @@ const App = () => {
   
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (persons.filter(e => e.name === newName).length > 0) {
-      alert(`${newName} is already added to phonebook`);
-      return ;
+    const match = persons.filter(e => e.name === newName);
+
+    if (match.length > 0) {
+      alert(`${newName} is already added to phonebook, replace the old number with a new one?`);
+      person.update(match[0].id, {...match[0], number : newNumber} ).then(data => {
+        const newPersons = persons.map(p => p.id !== match[0].id ? p : data);
+        setPersons(newPersons);
+        setfilteredPersons(newPersons);
+      });
+    }else {
+
+      person.create({name : newName, number : newNumber}).then(data => {
+        const newPersons = persons.concat(data)
+        setPersons(newPersons);
+        setfilteredPersons(newPersons);
+      });
     }
-
-    person.create({name : newName, number : newNumber}).then(data => {
-      const newPersons = persons.concat(data)
-      setPersons(newPersons);
-      setfilteredPersons(newPersons);
-    });
-
     
   }
 
