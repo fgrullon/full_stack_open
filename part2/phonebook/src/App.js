@@ -20,9 +20,15 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
       return ;
     }
-    const newPersons = persons.concat({name : newName, number : newNumber});
-    setPersons(newPersons);
-    setfilteredPersons(newPersons);
+    const newPerson = {name : newName, number : newNumber}
+
+    axios.post(`http://localhost:3001/persons`, newPerson).then(response => {
+      const newPersons = persons.concat(response.data);
+
+      setPersons(newPersons);
+      setfilteredPersons(newPersons);
+
+    })
   }
 
   const handleFilter = (event) => {
