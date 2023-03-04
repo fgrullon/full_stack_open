@@ -8,6 +8,7 @@ import Country from './components/Country';
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [searchCountry, setSearchCountry] = useState();
+  const [displayCountry, setDisplayCountry] = useState(null);
 
   useEffect(() => {
     if(searchCountry){
@@ -36,6 +37,10 @@ const App = () => {
     setSearchCountry(event.target.value);
   }
 
+  const handleShowCountry = (country) => {
+    setDisplayCountry(country);
+  }
+
   return (
     <>
     <div>
@@ -43,11 +48,18 @@ const App = () => {
 
 
     </div>
+    <div>
       {(countries.length === 1 
-      ?<Country countries={countries} />
-      : <Countries countries={countries} />
+      ?<Country country={countries[0]} />
+      : <Countries countries={countries} handleShowCountry={handleShowCountry}/>
       )}
+    </div>
+    <div>
+    {(displayCountry !== null ? <Country country={displayCountry} />  : '')}
+
+    </div>
     </>
+
   );
 }
 

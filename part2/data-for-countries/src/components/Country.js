@@ -1,7 +1,7 @@
 
-const Country = ({ countries }) => {
-    const country = countries[0];
-    const languages = Object.values(country.languages);
+const Country = ({ country }) => {
+
+  const languages = Object.values(country.languages);
 
     return(
       <div>
