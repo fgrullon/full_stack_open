@@ -1,13 +1,13 @@
 
 
-const Notification = ({ message }) => {
+const Notification = ({ type, message }) => {
 
     if(message === null){
         return null;
     }
 
     return(
-        <div className="success">
+        <div className={type}>
             { message }
         </div>
     );

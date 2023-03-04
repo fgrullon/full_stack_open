@@ -14,6 +14,8 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState();
   const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState('');
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const match = persons.filter(e => e.name === newName);
@@ -24,10 +26,19 @@ const App = () => {
         const newPersons = persons.map(p => p.id !== match[0].id ? p : data);
         setPersons(newPersons);
         setfilteredPersons(newPersons);
-
+        setMessageType('success');
         setMessage(`${match[0].name} Updated`);
         setTimeout(() => {
           setMessage(null);
+          setMessageType('');
+        }, 5000);
+      }).catch(error => {
+        setMessageType('error');
+        setMessage(`Information of ${match[0].name} has already been removed from server`);
+
+        setTimeout(() => {
+          setMessage(null);
+          setMessageType('');
         }, 5000);
       });
     }else {
@@ -36,9 +47,11 @@ const App = () => {
         const newPersons = persons.concat(data)
         setPersons(newPersons);
         setfilteredPersons(newPersons);
+        setMessageType('success');
         setMessage(`Added ${data.name}`);
         setTimeout(() => {
           setMessage(null);
+          setMessageType('');
         }, 5000);
       });
     }
@@ -69,7 +82,7 @@ const App = () => {
   return (
     <div>
       <h2>PhoneBook</h2>
-      <Notification message={message} />
+      <Notification type={messageType} message={message} />
       <PersonFilter
         handleFilter={handleFilter}
       />
