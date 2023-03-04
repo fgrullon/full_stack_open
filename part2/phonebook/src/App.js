@@ -44,6 +44,12 @@ const App = () => {
 
   }, []);
 
+  const removePerson = (p) => {
+    if(window.confirm(`Delete ${p.name}?`)){
+      person.remove(p.id)
+    }
+  }
+
   return (
     <div>
       <h2>PhoneBook</h2>
@@ -57,7 +63,7 @@ const App = () => {
         setNewNumber={setNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} handleDelete={removePerson} />
     </div>
   );
 }
