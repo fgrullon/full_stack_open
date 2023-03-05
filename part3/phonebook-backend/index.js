@@ -60,7 +60,21 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     let id = Math.floor((Math.random() * 100) + 10);
+
     const newPerson = {id, ...req.body};
+
+    if(!newPerson.name || !newPerson.number) {
+        return res.status(400).send({ 
+            error :'The name or number is missing'
+        });
+    }
+    const unique = persons.find(p => p.name.toLowerCase() === newPerson.name.toLowerCase());
+
+    if(unique){
+        return res.status(400).send({ 
+            error : 'The name already exists in the phonebook'
+        });
+    }
 
     const newPersons = persons.concat(newPerson);
 
