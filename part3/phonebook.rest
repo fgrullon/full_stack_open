@@ -5,3 +5,13 @@ GET http://localhost:3001/api/persons/1
 
 ###
 DELETE http://localhost:3001/api/persons/1
+
+###
+POST http://localhost:3001/api/persons/ HTTP/1.1
+Content-Type: application/json
+
+{ 
+    "name": "Frank Grullon", 
+    "number": "829-564-2707"
+}
+

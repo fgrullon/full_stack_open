@@ -25,6 +25,8 @@ const persons = [
     }
 ];
 
+app.use(express.json());
+
 app.get('/api/persons', (req, res) => {
 
     res.status(200).send(persons);
@@ -53,6 +55,16 @@ app.delete('/api/persons/:id', (req, res) => {
     const newPersons = [...persons.filter(p => p.id !== id)];
     console.log(newPersons)
     res.status(204).send();
+});
+
+
+app.post('/api/persons', (req, res) => {
+    let id = Math.floor((Math.random() * 100) + 10);
+    const newPerson = {id, ...req.body};
+
+    const newPersons = persons.concat(newPerson);
+
+    res.status(201).send(newPersons);
 });
 
 const PORT = 3001;
