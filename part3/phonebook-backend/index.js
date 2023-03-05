@@ -27,14 +27,33 @@ const persons = [
 
 app.get('/api/persons', (req, res) => {
 
-    res.send(persons);
+    res.status(200).send(persons);
 });
 
 app.get('/info', (req, res) => {
-    res.send(`<div>Phonebook has info for ${persons.length} people</div> <br /> <div>${new Date()}</div>`);
+    res.status(200).send(`<div>Phonebook has info for ${persons.length} people</div> <br /> <div>${new Date()}</div>`);
 
 });
 
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const person = persons.find(p => p.id === id);
+    
+    if(person){
+        res.status(200).send(person)
+    }else{
+        res.status(404).send('Person not find')
+    }
+
+});
+
+app.delete('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    const newPersons = [...persons.filter(p => p.id !== id)];
+    console.log(newPersons)
+    res.status(204).send();
+});
 
 const PORT = 3001;
 
