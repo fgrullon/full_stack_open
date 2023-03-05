@@ -12,21 +12,20 @@ const App = () => {
 
   useEffect(() => {
     if(searchCountry){
-      countryService
+        countryService
         .getCountry(searchCountry)
         .then(countries => {
           setCountries(countries);
         }).catch(error => {
-          console.log(error)
           setCountries([]);
         });
+
     }else{
       countryService
         .getAll()
         .then(countries => {
           setCountries(countries);
         }).catch(error => {
-          console.log(error);
           setCountries([]);
         });
     }
