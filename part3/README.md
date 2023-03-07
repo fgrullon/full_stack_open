@@ -5,4 +5,4 @@ In this part our focus shifts towards the backend, that is, towards implementing
 
 ## Fly.io url
 
-https://black-brook-9804.fly.dev/api/persons
+https://black-brook-9804.fly.dev
