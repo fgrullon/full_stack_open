@@ -75,7 +75,12 @@ const App = () => {
 
   const removePerson = (p) => {
     if(window.confirm(`Delete ${p.name}?`)){
-      person.remove(p.id)
+      const id = p.id || p._id;
+      person.remove(id)
+      const newPersons = persons.filter(person => person._id !== p._id);
+
+      setPersons(newPersons);
+      setfilteredPersons(newPersons);
     }
   }
 

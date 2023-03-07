@@ -52,11 +52,9 @@ app.get('/api/persons/:id', (req, res) => {
 });
 
 app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id);
-
-    const newPersons = [...persons.filter(p => p.id !== id)];
-    console.log(newPersons)
-    res.status(204).send();
+    Person.findOneAndRemove(req.params.id).then(response => {
+        res.status(204).end();
+    });
 });
 
 
