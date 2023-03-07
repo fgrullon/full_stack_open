@@ -62,7 +62,12 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
 
-    Person(res.body).save().then(response => {
+    const person = new Person({
+        name: req.body.name,
+        number: req.body.number
+    });
+
+    person.save().then(response => {
         const id = response._id;
         const newPerson = {id, ...req.body};
         res.status(201).send(newPerson);
