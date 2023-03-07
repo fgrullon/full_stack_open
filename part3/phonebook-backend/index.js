@@ -26,11 +26,12 @@ app.use(morgan('fso'));
 
 
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res, next) => {
 
-    Person.find({}).then(persons => {
+    Person.find({})
+    .then(persons => {
         res.status(200).send(persons);
-    });
+    }).catch(error => next(error));
    
 });
 
@@ -51,27 +52,47 @@ app.get('/api/persons/:id', (req, res) => {
 
 });
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
     Person.findOneAndRemove(req.params.id).then(response => {
         res.status(204).end();
-    });
+    }).catch(error => next(error));
 });
 
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
 
     const person = new Person({
         name: req.body.name,
         number: req.body.number
     });
 
-    person.save().then(response => {
+    person.save()
+    .then(response => {
         const id = response._id;
         const newPerson = {id, ...req.body};
         res.status(201).send(newPerson);
-    });
+    })
+    .catch(error => next(error));
     
 });
+
+const unkownEndPoint = (req, res) => {
+    res.status(404).send({ error : 'unknown endpoint' });
+}
+
+app.use(unkownEndPoint);
+
+const errorHandler = (error, req, res, next) => {
+    console.log(error.message);
+
+    if(error.name === 'CastError' && error.message.includes('ObjectId')){
+        return res.status(400).send({ error : 'malformatted id'});
+    }else{
+        return res.status(400).json({ error : error.message });
+    }
+}
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001
 
