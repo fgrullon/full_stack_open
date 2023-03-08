@@ -50,10 +50,13 @@ const App = () => {
           setfilteredPersons(newPersons);
           setMessageType('success');
           setMessage(`Added ${data.name}`);
+          setNewName('');
+          setNewNumber('');
           setTimeout(() => {
             setMessage(null);
             setMessageType('');
           }, 5000);
+
       }).catch(error => {
         setMessageType('error');
         setMessage(error.response.data.error);
@@ -67,7 +70,7 @@ const App = () => {
   }
 
   const handleFilter = (event) => {
-    const newPersons = persons.filter((e) => e.name.toLowerCase().includes(event.target.value))
+    const newPersons = persons.filter((e) => e.name.toLowerCase().includes(event.target.value.toLowerCase()));
 
     setfilteredPersons(newPersons);
   }
