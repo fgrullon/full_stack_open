@@ -36,19 +36,24 @@ app.get('/api/persons', (req, res, next) => {
 });
 
 app.get('/info', (req, res) => {
-    res.status(200).send(`<div>Phonebook has info for ${persons.length} people</div> <br /> <div>${new Date()}</div>`);
+    Person.find({}).then(response => {
+        res.status(200).send(`<div>Phonebook has info for ${response.length} people</div> <br /> <div>${new Date()}</div>`);
+    });
+
 
 });
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id);
-    const person = persons.find(p => p.id === id);
     
-    if(person){
-        res.status(200).send(person)
-    }else{
-        res.status(404).send('Person not find')
-    }
+    const id = req.params.id;
+
+    Person.findById(id).then(response => {
+        if(response){
+            res.status(200).send(response)
+        }else{
+            res.status(404).send('Person not find')
+        }
+    });
 
 });
 
@@ -91,7 +96,7 @@ app.put('/api/persons/:id', (req, res, next) => {
       res.json(person)
     })
     .catch((error) => next(error))
-    
+
 });
 
 
