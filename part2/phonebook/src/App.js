@@ -43,12 +43,20 @@ const App = () => {
       });
     }else {
 
-      person.create({name : newName, number : newNumber}).then(data => {
-        const newPersons = persons.concat(data)
-        setPersons(newPersons);
-        setfilteredPersons(newPersons);
-        setMessageType('success');
-        setMessage(`Added ${data.name}`);
+      person.create({name : newName, number : newNumber})
+      .then(data => {
+          const newPersons = persons.concat(data)
+          setPersons(newPersons);
+          setfilteredPersons(newPersons);
+          setMessageType('success');
+          setMessage(`Added ${data.name}`);
+          setTimeout(() => {
+            setMessage(null);
+            setMessageType('');
+          }, 5000);
+      }).catch(error => {
+        setMessageType('error');
+        setMessage(error.response.data.error);
         setTimeout(() => {
           setMessage(null);
           setMessageType('');
