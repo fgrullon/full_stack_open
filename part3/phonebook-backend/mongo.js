@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+const process = require('process');
+
+
 if(process.argv.length < 3){
     console.log('Password is required');
     process.exit(1);
@@ -33,9 +36,11 @@ if(process.argv.length === 5){
 }else{
     Person.find({}).then(response => {
         console.log('phonebook:');
+        
         response.forEach(person => {
             console.log(`${person.name} ${person.number}`);
-        })
+        });
+
         mongoose.connection.close();
     });
 }

@@ -1,35 +1,31 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const mongoose = require('mongoose');
 require('dotenv').config();
 const Person = require('./models/persons');
+const process = require('process');
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-app.use(express.static('build'))
+app.use(express.static('build'));
 
-morgan.token('body', (req, res) => {
+morgan.token('body', (req) => {
     if (!req.body ) {
         return '';
     }
     return JSON.stringify(req.body);
 });
 
-morgan.format('fso', `:method :url :status :res[content-length] - :response-time ms :body`)
+morgan.format('fso', ':method :url :status :res[content-length] - :response-time ms :body');
 
 app.use(morgan('fso'));
 
-
-
-
 app.get('/api/persons', (req, res, next) => {
 
-    Person.find({})
-    .then(persons => {
+    Person.find({}).then(persons => {
         res.status(200).send(persons);
     }).catch(error => next(error));
    
@@ -49,22 +45,19 @@ app.get('/api/persons/:id', (req, res) => {
 
     Person.findById(id).then(response => {
         if(response){
-            res.status(200).send(response)
+            res.status(200).send(response);
         }else{
-            res.status(404).send('Person not find')
+            res.status(404).send('Person not find');
         }
     });
 
 });
 
 app.delete('/api/persons/:id', (req, res, next) => {
-    Person.findOneAndRemove(req.params.id).then(response => {
+    Person.findOneAndRemove(req.params.id).then(() => {
         res.status(204).end();
     }).catch(error => next(error));
 });
-
-
-
 
 app.post('/api/persons', (req, res, next) => {
 
@@ -73,13 +66,11 @@ app.post('/api/persons', (req, res, next) => {
         number: req.body.number
     });
 
-    person.save()
-        .then(response => {
-            const id = response._id;
-            const newPerson = {id, ...req.body};
-            res.status(201).send(newPerson);
-        })
-        .catch(error => next(error));
+    person.save().then(response => {
+        const id = response._id;
+        const newPerson = {id, ...req.body};
+        res.status(201).send(newPerson);
+    }).catch(error => next(error));
     
 });
 
@@ -88,9 +79,9 @@ app.put('/api/persons/:id', (req, res, next) => {
     const { name, number } = req.body;
 
     Person.findByIdAndUpdate(
-            req.params.id,
-            { name, number }, 
-            { new: true, runValidators: true, context: 'query' })
+        req.params.id,
+        { name, number }, 
+        { new: true, runValidators: true, context: 'query' })
         .then(person => res.json(person))
         .catch((error) => next(error));
 
@@ -99,7 +90,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 
 const unkownEndPoint = (req, res) => {
     res.status(404).send({ error : 'unknown endpoint' });
-}
+};
 
 app.use(unkownEndPoint);
 
@@ -112,12 +103,12 @@ const errorHandler = (error, req, res, next) => {
     }
 
     next(error);
-}
+};
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`);
 });
