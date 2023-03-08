@@ -22,8 +22,8 @@ const App = () => {
 
     if (match.length > 0) {
       alert(`${newName} is already added to phonebook, replace the old number with a new one?`);
-      person.update(match[0].id, {...match[0], number : newNumber} ).then(data => {
-        const newPersons = persons.map(p => p.id !== match[0].id ? p : data);
+      person.update(match[0]._id, {...match[0], number : newNumber} ).then(data => {
+        const newPersons = persons.map(p => p._id !== match[0]._id ? p : data);
         setPersons(newPersons);
         setfilteredPersons(newPersons);
         setMessageType('success');
