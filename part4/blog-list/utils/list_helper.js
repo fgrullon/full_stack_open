@@ -33,9 +33,23 @@ const mostBlogs = (blogs) => {
 
 }
 
+const mostLikes = (blogs) => {
+    if(blogs.length === 0) return {};
+    const map = {};
+
+    blogs.forEach(element => {
+        map[element.author] = map[element.author] ? map[element.author] + element.likes : element.likes;
+    });
+
+    const author = Object.entries(map).sort((a,b) => b[1] - a[1])[0];
+
+    return { author : author[0], likes : author[1]};
+}
+
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }

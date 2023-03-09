@@ -90,14 +90,26 @@ const blogs = [
 // })
 
 
-describe('most blogs', () => {
+// describe('most blogs', () => {
+//     const listWithOneBlog = blogs;
+  
+//     test('when list has only one blog, equals to that author', () => {
+//       const result = listHelper.mostBlogs(listWithOneBlog)
+//       expect(result).toEqual(     {
+//         author: "Robert C. Martin",
+//         blogs: 3,
+//       },)
+//     })
+// })
+
+describe('most likes', () => {
     const listWithOneBlog = blogs;
   
     test('when list has only one blog, equals to that author', () => {
-      const result = listHelper.mostBlogs(listWithOneBlog)
+      const result = listHelper.mostLikes(listWithOneBlog)
       expect(result).toEqual(     {
-        author: "Robert C. Martin",
-        blogs: 3,
+        author: "Edsger W. Dijkstra",
+        likes: 17
       },)
     })
 })
