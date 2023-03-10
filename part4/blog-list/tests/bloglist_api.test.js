@@ -15,6 +15,7 @@ beforeEach( async () => {
     }
 });
 
+
 test('all notes are returned', async () => {
 
     const response = await api
@@ -30,5 +31,26 @@ test('all notes have id', async () => {
 
     const response = await api.get('/api/blogs');
     expect(response.body[0].id).toBeDefined();
+
+});
+
+test('successfully creates a new blog post', async () => {
+
+    const post = {
+        title: 'On let vs const',
+        author: 'Dan Abramov',
+        url: 'https://overreacted.io/',
+        likes: 1
+    };
+
+    await api.post('/api/blogs').send(post)
+     
+
+    const response = await api.get('/api/blogs');
+    const titles = response.body.map(blog => blog.title);
+
+    expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
+    expect(titles).toContain('On let vs const')
+
 
 });

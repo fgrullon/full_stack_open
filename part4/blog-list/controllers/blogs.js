@@ -8,11 +8,11 @@ blogsRouter.get('/', async (req, res) => {
 
 });
 
-blogsRouter.post('/api/blogs', async (req, res) => {
+blogsRouter.post('/', async (req, res) => {
     
     const blog = new Blog(req.body);
     await blog.save();
-    return res.status(200).json(blog);
+    return res.status(201).json(blog);
 
 });
 
