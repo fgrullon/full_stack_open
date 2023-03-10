@@ -54,3 +54,21 @@ test('successfully creates a new blog post', async () => {
 
 
 });
+
+
+test('set a default like value if not include in request', async () => {
+
+    const post = {
+        title: 'On let vs const',
+        author: 'Dan Abramov',
+        url: 'https://overreacted.io/'
+    };
+
+    await api.post('/api/blogs').send(post)
+
+    const response = await api.get('/api/blogs');
+    const new_post = response.body.filter(blog => blog.title === 'On let vs const');
+
+    expect(new_post[0].likes).toBeDefined();
+
+}, 100000);
