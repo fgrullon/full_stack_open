@@ -6,6 +6,7 @@ const blogsRouter = require('./controllers/blogs');
 const logger = require('./utils/logger');
 const mongoose = require('mongoose');
 
+
 mongoose.set('strictQuery', false);
 
 logger.info('connecting to Database');
