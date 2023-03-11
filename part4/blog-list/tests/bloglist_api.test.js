@@ -8,91 +8,107 @@ const helper = require('./test_helper');
 // Clean and Initialize the database 
 beforeEach( async () => {
     await Blog.deleteMany({});
+    await Blog.insertMany(helper.initialBlogs);
+});
+
+describe('blogs are returned as a json', () => {
+
+    test('all notes are returned', async () => {
+
+        await api
+            .get('/api/blogs')
+            .expect(200)
+            .expect('Content-Type', /application\/json/);   
+
+    });
+
+    test('all notes are returned', async () => {
+
+        const response = await api.get('/api/blogs')
+        expect(response.body).toHaveLength( helper.initialBlogs.length);
     
-    for(let blog of helper.initialBlogs){
-        let blogObject = new Blog(blog);
-        await blogObject.save();
-    }
-});
+    });
 
+    test('a specific note is whitin the returned blogs', async () => {
+        const response = await api.get('/api/blogs');
+        const titles = response.body.map(blog => blog.title);
+    
+        expect(titles).toContain('React patterns');
+    });
 
-test('all notes are returned', async () => {
+    test('all notes have id', async () => {
 
-    const response = await api
-        .get('/api/blogs')
-        .expect(200)
-        .expect('Content-Type', /application\/json/);
-
-    expect(response.body).toHaveLength( helper.initialBlogs.length);
-
-});
-
-test('all notes have id', async () => {
-
-    const response = await api.get('/api/blogs');
-    expect(response.body[0].id).toBeDefined();
+        const response = await api.get('/api/blogs');
+        expect(response.body[0].id).toBeDefined();
+    
+    });
 
 });
 
-test('successfully creates a new blog post', async () => {
+describe('addition of a new blog', () => {
 
-    const post = {
-        title: 'On let vs const',
-        author: 'Dan Abramov',
-        url: 'https://overreacted.io/',
-        likes: 1
-    };
+    test('successfully creates a new blog post', async () => {
 
-    await api.post('/api/blogs').send(post)
-     
+        const post = {
+            title: 'On let vs const',
+            author: 'Dan Abramov',
+            url: 'https://overreacted.io/',
+            likes: 1
+        };
+    
+        await api.post('/api/blogs').send(post);
+    
+        const response = await api.get('/api/blogs');
+        const titles = response.body.map(blog => blog.title);
+    
+        expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
+        expect(titles).toContain('On let vs const')
+    
+    
+    });
 
-    const response = await api.get('/api/blogs');
-    const titles = response.body.map(blog => blog.title);
+    test('fails with status code 400 if data invalid', async () => {
 
-    expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
-    expect(titles).toContain('On let vs const')
+        const post = {
+            author: 'Dan Abramov',
+            likes : 1
+        };
+    
+        await api.post('/api/blogs').send(post).expect(400);
+    
+    });
 
+    test('set a default like value if not include in request', async () => {
 
+        const post = {
+            title: 'On let vs const',
+            author: 'Dan Abramov',
+            url: 'https://overreacted.io/'
+        };
+    
+        await api.post('/api/blogs').send(post)
+    
+        const response = await api.get('/api/blogs');
+        const new_post = response.body.filter(blog => blog.title === 'On let vs const');
+    
+        expect(new_post[0].likes).toBeDefined();
+    
+    }, 100000);
+    
 });
 
 
-test('set a default like value if not include in request', async () => {
+describe('deletion of a blog', () => {
+    test('succeds with status code 204 if id is valid', async () => {
+        const firstBlog = await helper.blogInDb();
+        const blogToBeDelete = firstBlog[0];
 
-    const post = {
-        title: 'On let vs const',
-        author: 'Dan Abramov',
-        url: 'https://overreacted.io/'
-    };
+        await api.delete(`/api/blogs/${blogToBeDelete.id}`).expect(204);
 
-    await api.post('/api/blogs').send(post)
+        const blogsAtEnd = await helper.blogInDb();
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
 
-    const response = await api.get('/api/blogs');
-    const new_post = response.body.filter(blog => blog.title === 'On let vs const');
-
-    expect(new_post[0].likes).toBeDefined();
-
-}, 100000);
-
-test('create post title is required', async () => {
-
-    const post = {
-        author: 'Dan Abramov',
-        url: 'https://overreacted.io/',
-        likes : 1
-    };
-
-    await api.post('/api/blogs').send(post).expect(400);
-
-});
-
-test('create post url is required', async () => {
-
-    const post = {
-        title: 'On let vs const',
-        author: 'Dan Abramov',
-        likes : 1
-    };
-
-    await api.post('/api/blogs').send(post).expect(400);
-
-});
+        const titles = blogsAtEnd.map(blog => blog.title);
+        expect(titles).not.toContain(blogToBeDelete.title);
+    })
+})
