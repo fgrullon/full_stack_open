@@ -94,6 +94,22 @@ describe('addition of a new blog', () => {
         expect(new_post[0].likes).toBeDefined();
     
     }, 100000);
+
+    test('successfully update a blog post', async () => {
+
+        const post = {
+            id: '5a422a851b54a676234d17f7',
+            title: 'React patterns',
+            author: 'Michael Chan',
+            url: 'https://reactpatterns.com/',
+            likes: 10
+        };
+    
+        const updatedPost = await api.put(`/api/blogs/${post.id}`).send(post).expect(200);
+
+        expect(updatedPost.body.likes).toBe(post.likes);
+
+    });
     
 });
 
