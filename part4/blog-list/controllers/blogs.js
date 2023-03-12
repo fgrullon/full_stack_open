@@ -40,9 +40,22 @@ blogsRouter.post('/', async (req, res, next) => {
     }
 });
 
-blogsRouter.delete('/:id', async (req, res) => {
+blogsRouter.delete('/:id', async (req, res, next) => {
     try {
-        await Blog.findByIdAndRemove(req.params.id);
+        const decodedToken = jwt.verify(req.token, process.env.SECRET)
+        
+        if(!decodedToken.id){
+            return res.status(401).json({ error : 'unauthorized invalid' });
+        }
+        const user = await User.findById( decodedToken.id );
+        const blog = await Blog.findById(req.params.id);
+
+        if((user.id && blog.user) & user.id.toString() === blog.user.toString()){
+            await Blog.findByIdAndRemove(req.params.id);
+        }else{
+            return res.status(401).json({ error : 'unauthorized' });
+        }
+
         res.status(204).end();
     } catch (exception) {
         next(exception);
