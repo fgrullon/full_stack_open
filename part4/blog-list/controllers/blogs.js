@@ -26,7 +26,6 @@ blogsRouter.get('/', async (req, res, next) => {
 });
 
 blogsRouter.post('/', async (req, res, next) => {
-    console.log(req.Authorization)
     try {
         const body = req.body;
         const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
