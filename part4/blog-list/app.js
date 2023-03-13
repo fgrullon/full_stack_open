@@ -30,6 +30,7 @@ mongoose.connect(config.MONGO_URI)
 app.use(cors());
 app.use(express.json());
 app.use(tokenExtractor);
+app.use(requestLogger);
 
 
 app.use('/api/blogs', userExtractor, blogsRouter);

@@ -4,11 +4,16 @@ const app = require('../app');
 const api = supertest(app);
 const Blog = require('../models/blog');
 const helper = require('./test_helper');
-
+const User = require('../models/user');
+const bcrypt = require('bcrypt');
 // Clean and Initialize the database 
 beforeEach( async () => {
     await Blog.deleteMany({});
-    await Blog.insertMany(helper.initialBlogs);
+
+    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog));
+    const promiseArray = blogObjects.map(blog => blog.save);
+    
+    await Promise.all(promiseArray);
 });
 
 describe('blogs are returned as a json', () => {
@@ -46,23 +51,45 @@ describe('blogs are returned as a json', () => {
 });
 
 describe('addition of a new blog', () => {
+    let token = null;
 
-    test('successfully creates a new blog post', async () => {
+    beforeAll( async () => {
+        await User.deleteMany({});
 
-        const post = {
-            title: 'On let vs const',
-            author: 'Dan Abramov',
-            url: 'https://overreacted.io/',
-            likes: 1
+        const passwordHash = await bcrypt.hash('password', 10);
+        const user = new User({ username : 'frank', passwordHash });
+        
+        await user.save();
+
+        //login
+        await api.post('/api/login').send({ username : 'jane', password : 'password' })
+                .then( res => {
+                    return (token = res.body.token)
+                });
+
+        return token;
+    });
+
+    test('successfully creates a new blog post by auhtorized user', async () => {
+
+        const blog = {
+            title: 'useGet/Post React Custom hook',
+            author: 'Sebastian Ahlman',
+            url: 'https://medium.com'
         };
     
-        await api.post('/api/blogs').send(post);
+        await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(blog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
     
-        const response = await api.get('/api/blogs');
+        const blogsAtEnd = await helper.blogInDb();
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
         const titles = response.body.map(blog => blog.title);
-    
-        expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
-        expect(titles).toContain('On let vs const')
+        expect(titles).toContain('useGet/Post React Custom hook')
     
     
     });
@@ -74,7 +101,15 @@ describe('addition of a new blog', () => {
             likes : 1
         };
     
-        await api.post('/api/blogs').send(post).expect(400);
+        await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(post)
+            .expect(400)
+
+        const blogsAtEnd = await helper.blogsInDb()
+
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
     
     });
 
@@ -86,18 +121,25 @@ describe('addition of a new blog', () => {
             url: 'https://overreacted.io/'
         };
     
-        await api.post('/api/blogs').send(post)
+        await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(post)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
     
-        const response = await api.get('/api/blogs');
-        const new_post = response.body.filter(blog => blog.title === 'On let vs const');
+        const blogsAtEnd = await helper.blogInDb();
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+        const new_post = blogsAtEnd.filter(blog => blog.title === 'On let vs const');
     
         expect(new_post[0].likes).toBeDefined();
     
-    }, 100000);
+    });
 
     test('successfully update a blog post', async () => {
 
-        const post = {
+        const blog = {
             id: '5a422a851b54a676234d17f7',
             title: 'React patterns',
             author: 'Michael Chan',
@@ -105,21 +147,83 @@ describe('addition of a new blog', () => {
             likes: 10
         };
     
-        const updatedPost = await api.put(`/api/blogs/${post.id}`).send(post).expect(200);
+        const updatedPost = await api.put(`/api/blogs/${post.id}`).send(blog).expect(200);
 
-        expect(updatedPost.body.likes).toBe(post.likes);
+        expect(updatedPost.body.likes).toBe(blog.likes);
 
     });
+
+    test('unauthorized user cannot create a blog', async () => {
+        const blog = {
+            title: 'React patterns',
+            author: 'Michael Chan',
+            url: 'https://reactpatterns.com/',
+            likes: 10
+        };
+
+        token = null
+
+        await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(blog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const blogsAtEnd = helper.blogInDb();
+
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    })
     
 });
 
 
 describe('deletion of a blog', () => {
-    test('succeds with status code 204 if id is valid', async () => {
-        const firstBlog = await helper.blogInDb();
-        const blogToBeDelete = firstBlog[0];
+    let token = null;
 
-        await api.delete(`/api/blogs/${blogToBeDelete.id}`).expect(204);
+    beforeAll( async () => {
+        await Blog.deleteMany({});
+        await User.deleteMany({});
+
+        const passwordHash = await bcrypt.hash('password', 10);
+        const user = new User({ username : 'jane', passwordHash });
+
+        await user.save();
+
+        //Login
+        await api
+            .post('/api/login')
+            .send({ username: 'jane', password: 'password' })
+            .then((res) => {
+                return (token = res.body.token)
+            })
+        
+        const blog = {
+            id: '5a422a851b54a676234d17f7',
+            title: 'React patterns',
+            author: 'Michael Chan',
+            url: 'https://reactpatterns.com/',
+            likes: 10
+        };
+
+        await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(post)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+        
+        return token
+    })
+
+    test('succeds with status code 204 if id is valid', async () => {
+        const blogsAtStart = await helper.blogInDb();
+        const blogToBeDelete = blogsAtStart[0];
+
+        await api
+            .delete(`/api/blogs/${blogToBeDelete.id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(204);
 
         const blogsAtEnd = await helper.blogInDb();
         expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
@@ -128,3 +232,7 @@ describe('deletion of a blog', () => {
         expect(titles).not.toContain(blogToBeDelete.title);
     })
 })
+
+afterAll(() => {
+    mongoose.connection.close()
+});
