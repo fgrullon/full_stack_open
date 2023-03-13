@@ -3,7 +3,7 @@ GET http://localhost:3003/api/blogs
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBpa2FjaHUiLCJpZCI6IjY0MGRiNmM3ZGFjZmEzZmU5ODliZWM5ZSIsImlhdCI6MTY3ODYyMTAyMiwiZXhwIjoxNjc4NjI0NjIyfQ.nvWw-hl96CPG9IwMVxzdWv0D8Rcjrmmo3LcIJ_o6CaE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBpa2FjaHUiLCJpZCI6IjY0MGRiNmM3ZGFjZmEzZmU5ODliZWM5ZSIsImlhdCI6MTY3ODczNTI2MSwiZXhwIjoxNjc4NzM4ODYxfQ.mKZ--uFsv_VNRrfhB5V3nY4yBvgqzY8Vo4ULoQFvGh8
 
 { 
     "title" : "Populate",
@@ -11,6 +11,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBpa
     "url":"https://fullstackopen.com",
     "likes": 3
 }
+
+###
+DELETE http://localhost:3003/api/blogs/640dbad9fb37de0e8ee82221 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBpa2FjaHUiLCJpZCI6IjY0MGRiNmM3ZGFjZmEzZmU5ODliZWM5ZSIsImlhdCI6MTY3ODYyMTAyMiwiZXhwIjoxNjc4NjI0NjIyfQ.nvWw-hl96CPG9IwMVxzdWv0D8Rcjrmmo3LcIJ_o6CaE
 
 ###
 POST http://localhost:3003/api/users HTTP/1.1
