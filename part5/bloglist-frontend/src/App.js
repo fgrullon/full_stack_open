@@ -4,7 +4,7 @@ import blogService from './services/blogs'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import loginService from './services/login'
-
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -14,7 +14,8 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState('')
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState('');
 
   useEffect(() => {
     if(user){
@@ -35,18 +36,33 @@ const App = () => {
 
   const handleSave = async (event) => {
     event.preventDefault();
+    try {
+      const blog = await blogService.create({
+        title,
+        author,
+        url
+      })
+  
+      setTitle('');
+      setAuthor('');
+      setUrl('');
+  
+      setBlogs([...blogs, blog]);
+      setMessageType('success');
+      setMessage(`a new blog ${title} by ${author} added`);
+      setTimeout(() => {
+        setMessage(null);
+        setMessageType('');
+      }, 5000);
+    } catch (error) {
+      setMessageType('error');
+      setMessage('Error occur while saving blog')
+      setTimeout(() => {
+        setMessage(null);
+        setMessage(null)
+      }, 5000)
+    }
 
-    const blog = await blogService.create({
-      title,
-      author,
-      url
-    })
-
-    setTitle('');
-    setAuthor('');
-    setUrl('');
-
-    setBlogs([...blogs, blog]);
   }
 
   const handleLogin = async (event) => {
@@ -66,10 +82,18 @@ const App = () => {
       setUser(user);
       setUsername('');
       setPassword('');
-    } catch (error) {
-      setErrorMessage('Wrong credentials')
+      setMessageType('success');
+      setMessage(`user ${user.name} logged in`)
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null);
+        setMessage(null)
+      }, 5000)
+    } catch (error) {
+      setMessageType('error');
+      setMessage('Wrong username or password')
+      setTimeout(() => {
+        setMessage(null);
+        setMessage(null)
       }, 5000)
     }
 
@@ -82,6 +106,8 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification type={messageType} message={message} />
+
       {
       !user && <LoginForm 
           handleLogin={handleLogin} 
