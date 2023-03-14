@@ -31,11 +31,16 @@ const errorHandler = (error, req, res, next) => {
 }
 
 const tokenExtractor = (req, res, next) => {
-
-    const authorization = req.get('authorization');
-
-    if(authorization && authorization.startsWith('Bearer ')){
-        req.token = authorization.replace('Bearer ', '');
+    
+    try {
+        if(req.headers.authorizarion){
+            const authorization = req.headers.authorizarion;
+            if(authorization && authorization.startsWith('Bearer ')){
+                req.token = authorization.replace('Bearer ', '');
+            }
+        }
+    } catch (error) {
+        next(error);
     }
 
     next();
