@@ -17,22 +17,23 @@ blogsRouter.get('/', async (req, res, next) => {
 });
 
 blogsRouter.post('/', async (req, res, next) => {
-    const body = req.body;
-    
-    const user = req.user;
-    
-    const blog = new Blog({ ...body, user : user.id });
-    const blogSaved = await blog.save();
+    try {
 
-    user.blogs = user.blogs.concat(blogSaved._id);
-    await user.save();
-
-    res.status(201).json(blogSaved.toJSON());
-    // try {
+        const body = req.body;
+        
+        const user = req.user;
+        
+        const blog = new Blog({ ...body, user : user.id });
+        const blogSaved = await blog.save();
+        blogSaved.user = user;
+        user.blogs = user.blogs.concat(blogSaved._id);
+        await user.save();
+        
+        res.status(201).json(blogSaved.toJSON());
       
-    // } catch (exception) {
-    //     next(exception);
-    // }
+    } catch (exception) {
+        next(exception);
+    }
 });
 
 blogsRouter.delete('/:id', async (req, res, next) => {
