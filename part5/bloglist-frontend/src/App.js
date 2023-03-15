@@ -53,6 +53,13 @@ const App = () => {
 
   }
 
+  const addLike = async (blog) => {
+
+    const updatedBlog = await blogService.update(blog.id, blog)
+    const newBlogs = blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog)
+    setBlogs(newBlogs);
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -116,7 +123,7 @@ const App = () => {
 
       }
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} addLike={addLike} />
       )}
     </div>
   )
