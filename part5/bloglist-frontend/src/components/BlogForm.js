@@ -1,5 +1,27 @@
+import { useState } from 'react';
 
-const BlogForm = ({ handleSave, title, setTitle, author, setAuthor, url, setUrl}) => {
+const BlogForm = ({ createBlog }) => {
+
+    const [title, setTitle] = useState('');
+    const [author, setAuthor] = useState('');
+    const [url, setUrl] = useState('');
+
+
+  const handleSave = async (event) => {
+    event.preventDefault();
+    
+    await createBlog({
+        title,
+        author,
+        url
+    });
+
+    setTitle('');
+    setAuthor('');
+    setUrl('');
+
+  }
+
     return (
         <form onSubmit={handleSave}>
             <div>

@@ -8,9 +8,6 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable';
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
@@ -34,22 +31,13 @@ const App = () => {
     }
   }, []);
 
-  const handleSave = async (event) => {
-    event.preventDefault();
+  const createBlog = async (blog) => {
     try {
-      const blog = await blogService.create({
-        title,
-        author,
-        url
-      })
+      const newBlog = await blogService.create(blog)
   
-      setTitle('');
-      setAuthor('');
-      setUrl('');
-  
-      setBlogs([...blogs, blog]);
+      setBlogs([...blogs, newBlog]);
       setMessageType('success');
-      setMessage(`a new blog ${title} by ${author} added`);
+      setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`);
       setTimeout(() => {
         setMessage(null);
         setMessageType('');
@@ -122,15 +110,7 @@ const App = () => {
           <p>{user.name} logged in</p><button onClick={handleLogout}>log out</button>
         </div>
 
-        <BlogForm 
-          handleSave={handleSave}
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          url={url}
-          setUrl={setUrl}
-        />
+        <BlogForm createBlog={createBlog} />
       </>
       
 
