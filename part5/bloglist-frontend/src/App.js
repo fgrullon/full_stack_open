@@ -58,6 +58,27 @@ const App = () => {
     const updatedBlog = await blogService.update(blog.id, blog)
     const newBlogs = blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog)
     setBlogs(newBlogs);
+
+    setMessageType('success');
+    setMessage(`blog ${blog.title} liked`);
+    setTimeout(() => {
+      setMessage(null);
+      setMessageType('');
+    }, 5000);
+  }
+
+  const removeBlog = async (blog) => {
+      const newBlogs = blogs.filter(b => b.id !== blog.id);
+      blogService.remove(blog.id)
+
+      setBlogs(newBlogs);
+
+      setMessageType('success');
+      setMessage(`blog ${blog.title} removed`);
+      setTimeout(() => {
+        setMessage(null);
+        setMessageType('');
+      }, 5000);
   }
 
   const handleLogin = async (event) => {
@@ -123,7 +144,7 @@ const App = () => {
 
       }
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} addLike={addLike} />
+        <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} />
       )}
     </div>
   )
