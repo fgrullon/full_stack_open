@@ -29,11 +29,13 @@ const Blog = ({ blog, addLike, removeBlog }) => {
         <button
           style={hide}
           onClick={() => setShowDetails(!showDetail)}
+          className="showDetail"
         >view</button>
 
         <button
           style={show}
           onClick={() => setShowDetails(!showDetail)}
+          className="hideDetail"
         >hide</button>
 
       </div>
