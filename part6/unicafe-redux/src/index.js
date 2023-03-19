@@ -33,13 +33,23 @@ const App = () => {
 
   return (
     <div>
-      <button onClick={good}>good</button> 
-      <button onClick={ok}>ok</button> 
+      <div>
+        <button onClick={good}>good</button> 
+        good {store.getState().good}
+      </div>
+
+      <div>
+        <button onClick={ok}>ok</button>
+        ok {store.getState().ok}
+      </div>
+
+      <div>
       <button onClick={bad}>bad</button>
+        bad {store.getState().bad}
+      </div>
+      <div>
       <button onClick={reset}>reset stats</button>
-      <div>good {store.getState().good}</div>
-      <div>ok {store.getState().ok}</div>
-      <div>bad {store.getState().bad}</div>
+      </div>
     </div>
   )
 }
