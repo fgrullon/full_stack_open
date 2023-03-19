@@ -83,7 +83,7 @@ describe('Blog app', function() {
 
       })
 
-      it.only('only the creator can see the remove button of a blog', function() {
+      it('only the creator can see the remove button of a blog', function() {
 
         //Check if for creator it exist
         cy.get('.showDetail').click()
@@ -99,6 +99,38 @@ describe('Blog app', function() {
 
       })
 
+
+      it.only('blogs are ordered according to likes', function()  {
+
+        cy.get('.showDetail').click()
+        cy.get('.like').click()
+        cy.wait(500)
+        cy.get('.like').click()
+        cy.wait(500)
+        cy.get('.like').click()
+
+        cy.get('.title').type('npm audit: Broken by Design')
+        cy.get('.author').type('Dan Abramov')
+        cy.get('.url').type('https://overreacted.io')
+
+        cy.get('.submit').click()
+
+        cy.wait(500)
+        cy.get('.showDetail').eq(1).click()
+
+        cy.get('.like').eq(1).click()
+        cy.wait(500)
+        cy.get('.like').eq(1).click()
+        cy.wait(500)
+        cy.get('.like').eq(1).click()
+        cy.wait(500)
+        cy.get('.like').eq(1).click()
+        cy.visit('http://localhost:3000')
+
+        cy.get('.blog').eq(0).should('contain', 'npm audit: Broken by Design')
+        cy.get('.blog').eq(1).should('contain', 'What Is JavaScript Made Of?')
+
+      })
 
     })
 
