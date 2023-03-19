@@ -139,7 +139,7 @@ const App = () => {
       }
       {user && <>
         <div>
-          <p>{user.name} logged in</p><button onClick={handleLogout}>log out</button>
+          <p>{user.name} logged in</p><button onClick={handleLogout} id="logout" >log out</button>
         </div>
 
         <BlogForm createBlog={createBlog} />
@@ -148,7 +148,7 @@ const App = () => {
 
       }
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} />
+        <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} currentUser={user.username} />
       )}
     </div>
   )

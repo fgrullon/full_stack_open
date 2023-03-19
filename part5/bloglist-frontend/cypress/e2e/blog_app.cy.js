@@ -4,6 +4,9 @@ describe('Blog app', function() {
     cy.resetdb()
     cy.createUser({ name : 'Frank', username : 'fgrullon', password : 'fullstackopen' })
     cy.visit('http://localhost:3000')
+
+    cy.createUser({ name : 'Liam', username : 'pikachu', password : 'fullstackopen' })
+    cy.visit('http://localhost:3000')
   })
 
   it('Login form is shown', function() {
@@ -66,17 +69,33 @@ describe('Blog app', function() {
         cy.get('.submit').click()
 
       })
-      it.only('A blog cand be liked', function() {
+      it('A blog cand be liked', function() {
         cy.get('.showDetail').click()
         cy.get('.like').click()
 
         cy.get('.blog').should('contain', 'likes 1')
       })
 
-      it.only('user who created a blog can delete it', function() {
+      it('user who created a blog can delete it', function() {
         cy.get('#remove').click()
 
         cy.get('.success').should('contain', 'blog What Is JavaScript Made Of? removed')
+
+      })
+
+      it.only('only the creator can see the remove button of a blog', function() {
+
+        //Check if for creator it exist
+        cy.get('.showDetail').click()
+        cy.get('#remove').should('exist')
+
+        //Logout from creator account and login to other user
+        cy.get('#logout').click()
+        cy.login({ username :'pikachu', password : 'fullstackopen' })
+
+        //Check if for the other user the remove button is displayed
+        cy.get('.showDetail').click()
+        cy.get('#remove').should('not.exist')
 
       })
 
