@@ -73,6 +73,14 @@ describe('Blog app', function() {
         cy.get('.blog').should('contain', 'likes 1')
       })
 
+      it.only('user who created a blog can delete it', function() {
+        cy.get('#remove').click()
+
+        cy.get('.success').should('contain', 'blog What Is JavaScript Made Of? removed')
+
+      })
+
+
     })
 
 
