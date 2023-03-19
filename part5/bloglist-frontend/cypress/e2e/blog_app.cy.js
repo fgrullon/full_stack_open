@@ -37,10 +37,11 @@ describe('Blog app', function() {
 
   describe('When logged in', function() {
     beforeEach(function() {
+      cy.contains('login').click()
       cy.login({ username :'fgrullon', password : 'fullstackopen' })
     })
 
-    it.only('A blog can be created', function() {
+    it('A blog can be created', function() {
 
       cy.get('.title').type('What Is JavaScript Made Of?')
       cy.get('.author').type('Dan Abramov')
@@ -54,6 +55,27 @@ describe('Blog app', function() {
       cy.get('.success').should('have.css', 'color', 'rgb(0, 128, 0)')
 
     })
+
+    describe('When a blog is created', function(){
+      beforeEach(function() {
+
+        cy.get('.title').type('What Is JavaScript Made Of?')
+        cy.get('.author').type('Dan Abramov')
+        cy.get('.url').type('https://overreacted.io')
+
+        cy.get('.submit').click()
+
+      })
+      it.only('A blog cand be liked', function() {
+        cy.get('.showDetail').click()
+        cy.get('.like').click()
+
+        cy.get('.blog').should('contain', 'likes 1')
+      })
+
+    })
+
+
   })
 
 
