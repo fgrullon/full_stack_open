@@ -1,7 +1,7 @@
 import { filterChange } from '../reducers/filterReducer'
 import { useDispatch } from 'react-redux'
 
-const FilterComponent = () => {
+const Filter = () => {
     const dispatch = useDispatch()
 
     return (
@@ -15,4 +15,4 @@ const FilterComponent = () => {
     )
 }
 
-export default FilterComponent
+export default Filter
