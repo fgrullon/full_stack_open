@@ -10,25 +10,35 @@ const App = () => {
   const dispatch = useNotificationDispatch()
 
   const updateMutation = useMutation(voteAnecdote, {
-    onSuccess: () => {
+    onSuccess: ({ content }) => {
       queryClient.invalidateQueries('anecdotes')
+      dispatch({
+        type : 'VOTE',
+        payload : content
+      })
+      setTimeout(() => {
+        dispatch({
+          type : 'CLEAR'
+        })
+      }, 5000)
+    },
+    onError : (err) => {
+      dispatch({
+        type : 'ERROR',
+        payload : 'A error ocurred'
+      })
+      setTimeout(() => {
+        dispatch({
+          type : 'CLEAR'
+        })
+      }, 5000)
     }
   })
 
   const handleVote = (anecdote) => {
     updateMutation.mutate({...anecdote, votes : anecdote.votes + 1})
-    dispatch({
-      type : 'VOTE',
-      payload : anecdote.content
-    })
-    setTimeout(() => {
-      dispatch({
-        type : 'CLEAR'
-      })
-    }, 5000)
-  }
 
-  console.log(updateMutation)
+  }
 
   const { status, data, error } = useQuery(
     'anecdotes',

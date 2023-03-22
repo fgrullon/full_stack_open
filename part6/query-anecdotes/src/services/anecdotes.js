@@ -11,4 +11,5 @@ export const createAnecdote = anecdote =>
 
 
 export const voteAnecdote = anecdote => 
-     axios.put(`${baseUrl}/${anecdote.id}`, anecdote).then(res => res.data)
+     axios.put(`${baseUrl}/${anecdote.id}`, anecdote)
+          .then(res => res.data)
