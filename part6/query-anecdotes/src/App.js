@@ -18,11 +18,11 @@ const App = () => {
   )
 
   if(status === 'loading'){
-    return(<spam>Loading... </spam>)
+    return(<span>Loading... </span>)
   }
 
   if(status === 'error'){
-    return(<spam>Error: { error.message }</spam>)
+    return(<span>Error: { error.message }</span>)
   }
 
   const anecdotes = data;
