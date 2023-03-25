@@ -6,9 +6,9 @@ import LoginForm from './components/LoginForm'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { showNotification } from './reducers/notificationReducer'
+import { setNotification } from './reducers/notificationReducer'
 import {  useDispatch, useSelector } from 'react-redux'
-import { initialBlogs, createBlog, likeBlog } from './reducers/blogReducer'
+import { initialBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -40,9 +40,9 @@ const App = () => {
   const create = async (blog) => {
     try {
       dispatch(createBlog(blog))
-      dispatch(showNotification(`a new blog ${blog.title} by ${blog.author} added`, 5))
+      dispatch(setNotification(`a new blog ${blog.title} by ${blog.author} added`, 5))
     } catch (error) {
-      dispatch(showNotification('Error occur while saving blog', 5))
+      dispatch(setNotification('Error occur while saving blog', 5))
     }
 
   }
@@ -51,17 +51,15 @@ const App = () => {
 
     dispatch(likeBlog(blog))
 
-    dispatch(showNotification(`blog ${blog.title} liked`, 5))
+    dispatch(setNotification(`blog ${blog.title} liked`, 5))
 
   }
 
-  const removeBlog = async (blog) => {
-    // const newBlogs = blogs.filter(b => b.id !== blog.id)
-    blogService.remove(blog.id)
+  const remove = async (blog) => {
 
-    // setBlogs(newBlogs)
+    dispatch(removeBlog(blog.id))
 
-    dispatch(showNotification(`blog ${blog.title} removed`, 5))
+    dispatch(setNotification(`blog ${blog.title} removed`, 5))
 
   }
 
@@ -83,10 +81,10 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      dispatch(showNotification(`user ${user.name} logged in`, 5))
+      dispatch(setNotification(`user ${user.name} logged in`, 5))
 
     } catch (error) {
-      dispatch(showNotification('Wrong username or password', 5))
+      dispatch(setNotification('Wrong username or password', 5))
 
     }
 
@@ -123,7 +121,7 @@ const App = () => {
       }
       {blogs.map(blog =>
 
-        <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} currentUser={user.username} />
+        <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={remove} currentUser={user.username} />
 
       )}
     </div>
