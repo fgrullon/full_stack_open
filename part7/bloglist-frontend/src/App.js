@@ -1,23 +1,22 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
-import loginService from './services/login'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { setNotification } from './reducers/notificationReducer'
 import {  useDispatch, useSelector } from 'react-redux'
 import { initialBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
+import { signin, login } from './reducers/userReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-
 
   const loginFormRef = useRef()
   const dispatch = useDispatch()
+
+  const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     if(user){
@@ -26,67 +25,31 @@ const App = () => {
 
   }, [user])
 
-  const blogs = useSelector(state => state.blogs)
-
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
     if(loggedUser){
       const user = JSON.parse(loggedUser)
-      setUser(user)
-      blogService.setConfig(user.token)
+      dispatch(login(user))
     }
   }, [])
 
   const create = async (blog) => {
-    try {
-      dispatch(createBlog(blog))
-      dispatch(setNotification(`a new blog ${blog.title} by ${blog.author} added`, 5))
-    } catch (error) {
-      dispatch(setNotification('Error occur while saving blog', 5))
-    }
-
+    dispatch(createBlog(blog))
   }
 
   const addLike = async (blog) => {
-
     dispatch(likeBlog(blog))
-
-    dispatch(setNotification(`blog ${blog.title} liked`, 5))
-
   }
 
   const remove = async (blog) => {
-
-    dispatch(removeBlog(blog.id))
-
-    dispatch(setNotification(`blog ${blog.title} removed`, 5))
-
+    dispatch(removeBlog(blog))
   }
 
   const handleLogin = async (event) => {
     event.preventDefault()
     loginFormRef.current.toggleVisibility()
 
-    try {
-      const user = await loginService.login({
-        username, password
-      })
-
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(user)
-      )
-
-
-      blogService.setConfig(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      dispatch(setNotification(`user ${user.name} logged in`, 5))
-
-    } catch (error) {
-      dispatch(setNotification('Wrong username or password', 5))
-
-    }
+    dispatch(signin({ username, password }))
 
   }
 

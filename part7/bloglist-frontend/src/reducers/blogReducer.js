@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
+import { setNotification } from './notificationReducer'
 
 const blogsSlice = createSlice({
   name : 'blogs',
@@ -32,8 +33,13 @@ export const initialBlogs = () => {
 
 export const createBlog = blog => {
   return async dispatch => {
-    const newBlog = await blogService.create(blog)
-    dispatch(addBlog(newBlog))
+    try {
+      const newBlog = await blogService.create(blog)
+      dispatch(addBlog(newBlog))
+      dispatch(setNotification(`a new blog ${newBlog.title} by ${newBlog.author} added`, 5))
+    } catch (error) {
+      dispatch(setNotification('Error occur while saving blog', 5))
+    }
   }
 }
 
@@ -41,12 +47,17 @@ export const likeBlog = blog => {
   return async dispatch => {
     const likedBlog = await blogService.update(blog.id, { ...blog, likes : blog.likes  })
     dispatch(updateBlog(likedBlog))
+    dispatch(setNotification(`blog ${likedBlog.title} liked`, 5))
+
   }
 }
 
-export const removeBlog = id => {
+export const removeBlog = blog => {
   return async dispatch => {
-    blogService.remove(id)
+    const id = blog.id
+    await blogService.remove(id)
     dispatch(deleteBlog(id))
+
+    dispatch(setNotification(`blog ${blog.title} removed`, 5))
   }
 }
