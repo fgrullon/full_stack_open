@@ -1,12 +1,19 @@
-const Notification = ({ type, message }) => {
+import { useNotificationValue } from '../reducers/NotificationContext'
+const Notification = () => {
 
-  if(message === null){
-    return null
-  }
+  const nofitication = useNotificationValue()
+
+
+  // const style = {
+  //   border: 'solid',
+  //   padding: 10,
+  //   borderWidth: 1,
+  //   marginBottom: 5
+  // }
 
   return (
-    <div className={ type }>
-      { message }
+    <div className={ nofitication.class }>
+      { nofitication.message }
     </div>
   )
 }

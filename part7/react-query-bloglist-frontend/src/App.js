@@ -6,15 +6,16 @@ import LoginForm from './components/LoginForm'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import { useNotificationDispatch } from './reducers/NotificationContext'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
-  const [messageType, setMessageType] = useState('')
 
+
+  const notification = useNotificationDispatch()
   const loginFormRef = useRef()
 
   useEffect(() => {
@@ -34,54 +35,51 @@ const App = () => {
     }
   }, [])
 
+
+
   const createBlog = async (blog) => {
     try {
       const newBlog = await blogService.create(blog)
 
       setBlogs([...blogs, newBlog])
-      setMessageType('success')
-      setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
-      setTimeout(() => {
-        setMessage(null)
-        setMessageType('')
-      }, 5000)
+      notification({
+        type : 'ADD',
+        payload : newBlog
+      })
+
     } catch (error) {
-      setMessageType('error')
-      setMessage('Error occur while saving blog')
-      setTimeout(() => {
-        setMessage(null)
-        setMessage(null)
-      }, 5000)
+      notification({ type : 'ERROR' })
     }
 
   }
 
   const addLike = async (blog) => {
 
-    const updatedBlog = await blogService.update(blog.id, blog)
-    const newBlogs = blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog)
-    setBlogs(newBlogs)
+    try {
+      const updatedBlog = await blogService.update(blog.id, blog)
+      const newBlogs = blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog)
+      setBlogs(newBlogs)
+      notification({ type : 'LIKE', payload : newBlogs })
 
-    setMessageType('success')
-    setMessage(`blog ${blog.title} liked`)
-    setTimeout(() => {
-      setMessage(null)
-      setMessageType('')
-    }, 5000)
+    } catch (error) {
+      notification({ type : 'ERROR' })
+    }
+
+
   }
 
   const removeBlog = async (blog) => {
-    const newBlogs = blogs.filter(b => b.id !== blog.id)
-    blogService.remove(blog.id)
+    try {
+      const newBlogs = blogs.filter(b => b.id !== blog.id)
+      blogService.remove(blog.id)
 
-    setBlogs(newBlogs)
+      setBlogs(newBlogs)
+      notification({ type : 'DELETE', payload : blog })
 
-    setMessageType('success')
-    setMessage(`blog ${blog.title} removed`)
-    setTimeout(() => {
-      setMessage(null)
-      setMessageType('')
-    }, 5000)
+    } catch (error) {
+      notification({ type : 'ERROR' })
+    }
+
   }
 
   const handleLogin = async (event) => {
@@ -102,19 +100,11 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      setMessageType('success')
-      setMessage(`user ${user.name} logged in`)
-      setTimeout(() => {
-        setMessage(null)
-        setMessage(null)
-      }, 5000)
+
+      notification({ type : 'LOGGED', payload : user })
     } catch (error) {
-      setMessageType('error')
-      setMessage('Wrong username or password')
-      setTimeout(() => {
-        setMessage(null)
-        setMessage(null)
-      }, 5000)
+      notification({ type : 'LOGIN_ERROR' })
+
     }
 
   }
@@ -126,8 +116,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification type={messageType} message={message} />
-
+      <Notification />
       {!user && <Togglable buttonLabel="login" ref={loginFormRef}>
         <LoginForm
           handleLogin={handleLogin}
