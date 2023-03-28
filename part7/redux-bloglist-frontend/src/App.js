@@ -49,8 +49,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
       <Menu />
+      <h2>blogs</h2>
       <Notification />
       {!user && <Togglable buttonLabel="login" ref={loginFormRef}>
         <LoginForm

@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import { Alert } from '@mui/material'
 
 const Notification = () => {
   const notification = useSelector(state => state.notification)
@@ -14,7 +15,10 @@ const Notification = () => {
 
   return (
     <div style={style}>
-      { notification }
+      {(notification &&
+        <Alert serverity="success">
+          {notification}
+        </Alert>)}
     </div>
   )
 }

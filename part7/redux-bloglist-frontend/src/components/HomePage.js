@@ -1,16 +1,19 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import BlogForm from './BlogForm'
-import Notification from './Notification'
 import {  useDispatch, useSelector } from 'react-redux'
 import { initialBlogs, createBlog } from '../reducers/blogReducer'
 import {  login } from '../reducers/userReducer'
 import { Link } from 'react-router-dom'
+import Togglable from './Togglable'
 
 const HomePage = () => {
   const dispatch = useDispatch()
 
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
+
+
+  const createFormRef = useRef()
 
   useEffect(() => {
     if(user){
@@ -34,12 +37,10 @@ const HomePage = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      <Notification />
 
-      {user && <>
-        <BlogForm createBlog={create} />
-      </>}
+      {user && <Togglable buttonLabel="create blog" ref={createFormRef}>
+        <BlogForm createBlog={create} /></Togglable>
+      }
 
       {blogs.map(blog =>
         <div key={blog.id} className="blogs">
