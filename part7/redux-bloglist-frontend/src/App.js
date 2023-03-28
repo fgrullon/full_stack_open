@@ -12,6 +12,7 @@ import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
 import { signin } from './reducers/userReducer'
+import Menu from './components/Menu'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -45,15 +46,11 @@ const App = () => {
 
   }
 
-  const handleLogout = () => {
-    window.localStorage.clear()
-    window.location.reload(true)
-  }
-
 
   return (
     <div>
       <h2>blogs</h2>
+      <Menu />
       <Notification />
       {!user && <Togglable buttonLabel="login" ref={loginFormRef}>
         <LoginForm
@@ -64,15 +61,7 @@ const App = () => {
           setPassword={setPassword}
         /></Togglable>
       }
-      {user && <>
-        <div>
-          <p>{user.name} logged in</p><button onClick={handleLogout} id="logout" >log out</button>
-        </div>
 
-      </>
-
-
-      }
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/users' element={<Users />} />
