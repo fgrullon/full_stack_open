@@ -27,32 +27,40 @@ const Blog = ({ addLike, removeBlog, currentUser }) => {
   }
 
   return (
-    <div >
-      <div className="titleAndAuthor">
-        <h2>{blog.title} {blog.author}</h2>
+    <div>
+      <div >
+        <div className="titleAndAuthor">
+          <h2>{blog.title} {blog.author}</h2>
 
 
-      </div>
-      <div>
-        <div>
-          <Link to={blog.url}>{blog.url}</Link>
         </div>
         <div>
-          {blog.likes} likes
-          <button
-            onClick={handleLike}
-            className="like"
-          >like</button>
-        </div>
-        <div>
+          <div>
+            <Link to={blog.url}>{blog.url}</Link>
+          </div>
+          <div>
+            {blog.likes} likes
+            <button
+              onClick={handleLike}
+              className="like"
+            >like</button>
+          </div>
+          <div>
           added by {blog.user.name}
+          </div>
+        </div>
+        <div>
+          {currentUser === blog.user.username
+            ? <button onClick={handleRemove} id="remove">remove</button>
+            : ''
+          }
         </div>
       </div>
       <div>
-        {currentUser === blog.user.username
-          ? <button onClick={handleRemove} id="remove">remove</button>
-          : ''
-        }
+        <h2>comments</h2>
+        <ul>
+          {blog.comments.map((c, idx) => <li key={idx}>{c}</li>)}
+        </ul>
       </div>
     </div>
   )

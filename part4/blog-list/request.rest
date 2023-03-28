@@ -1,5 +1,5 @@
 GET http://localhost:3003/api/blogs
-
+Authorizarion: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZyYW5rZyIsImlkIjoiNjQwZDM5NmQ1YjZjNjBhMTczYTg3MzQ3IiwiaWF0IjoxNjgwMDM1OTc3LCJleHAiOjE2ODAwMzk1Nzd9.gH1rV9HEUqvejp9u7RdDBQD2o1VlRU5YQK_otS6sCos
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 Content-Type: application/json
@@ -40,3 +40,13 @@ Content-Type: application/json
 
 ###
 POST http://localhost:3003/api/testing/reset HTTP/1.1
+
+###
+
+POST http://localhost:3003/api/blogs/640d464fd8183facfb9bf587/comments HTTP/1.1
+Content-Type: application/json
+Authorizarion: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZyYW5rZyIsImlkIjoiNjQwZDM5NmQ1YjZjNjBhMTczYTg3MzQ3IiwiaWF0IjoxNjgwMDM1OTc3LCJleHAiOjE2ODAwMzk1Nzd9.gH1rV9HEUqvejp9u7RdDBQD2o1VlRU5YQK_otS6sCos
+
+{ 
+    "comments" : "Populate"
+}

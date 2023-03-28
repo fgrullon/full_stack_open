@@ -61,3 +61,12 @@ export const removeBlog = blog => {
     dispatch(setNotification(`blog ${blog.title} removed`, 5))
   }
 }
+
+export const commentBlog = (blog, comment) => {
+  return async dispatch => {
+    const commentedBlog = await blogService.comment(blog.id, comment)
+    dispatch(updateBlog(commentedBlog))
+    dispatch(setNotification(`blog ${commentedBlog.title} commented`, 5))
+
+  }
+}

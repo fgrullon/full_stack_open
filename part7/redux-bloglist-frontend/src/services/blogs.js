@@ -28,5 +28,10 @@ const remove = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, config)
 }
 
+const comment = async (id, comment) => {
+  const response = await axios.put(`${baseUrl}/${id}/comments`, comment, config)
+  return response.data
+}
 
-export default { getAll, create, setConfig, update, remove }
+
+export default { getAll, create, setConfig, update, remove, comment }
