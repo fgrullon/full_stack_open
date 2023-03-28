@@ -7,25 +7,20 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useNotificationDispatch } from './reducers/NotificationContext'
-
+import {  useBlogValue, useBlogDispatch } from './reducers/BlogsContext'
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-
   const notification = useNotificationDispatch()
   const loginFormRef = useRef()
+  const BlogDispatch = useBlogDispatch()
 
-  useEffect(() => {
-    if(user){
-      blogService.getAll().then(blogs =>
-        setBlogs( blogs )
-      )
-    }
-  }, [user])
 
+
+  // const blogs = getBlogs()
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
     if(loggedUser){
@@ -33,15 +28,17 @@ const App = () => {
       setUser(user)
       blogService.setConfig(user.token)
     }
+
+    BlogDispatch({ type : 'FETCH' })
   }, [])
-
-
+  const blogs =  useBlogValue()
+  console.log(blogs)
 
   const createBlog = async (blog) => {
     try {
       const newBlog = await blogService.create(blog)
 
-      setBlogs([...blogs, newBlog])
+      // setBlogs([...blogs, newBlog])
       notification({
         type : 'ADD',
         payload : newBlog
@@ -58,7 +55,7 @@ const App = () => {
     try {
       const updatedBlog = await blogService.update(blog.id, blog)
       const newBlogs = blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog)
-      setBlogs(newBlogs)
+      // setBlogs(newBlogs)
       notification({ type : 'LIKE', payload : newBlogs })
 
     } catch (error) {
@@ -70,10 +67,10 @@ const App = () => {
 
   const removeBlog = async (blog) => {
     try {
-      const newBlogs = blogs.filter(b => b.id !== blog.id)
+      blogs.filter(b => b.id !== blog.id)
       blogService.remove(blog.id)
 
-      setBlogs(newBlogs)
+      // setBlogs(newBlogs)
       notification({ type : 'DELETE', payload : blog })
 
     } catch (error) {
@@ -113,6 +110,7 @@ const App = () => {
     window.localStorage.clear()
     window.location.reload(true)
   }
+
   return (
     <div>
       <h2>blogs</h2>
@@ -136,7 +134,7 @@ const App = () => {
 
 
       }
-      {blogs.map(blog =>
+      {blogs.length > 0 && blogs.map(blog =>
         <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog} currentUser={user.username} />
       )}
     </div>

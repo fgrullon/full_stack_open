@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
-import BlogForm from './components/BlogForm'
-import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import {  useDispatch, useSelector } from 'react-redux'
-import { initialBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogReducer'
-import { signin, login } from './reducers/userReducer'
+import { initialBlogs } from './reducers/blogReducer'
+import { login } from './reducers/userReducer'
+import { Routes, Route } from 'react-router-dom'
+import LoginForm from './components/LoginForm'
+
+import HomePage from './components/HomePage'
+import Togglable from './components/Togglable'
+import User from './components/User'
+import { signin } from './reducers/userReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -15,7 +18,6 @@ const App = () => {
   const loginFormRef = useRef()
   const dispatch = useDispatch()
 
-  const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
 
   useEffect(() => {
@@ -33,18 +35,6 @@ const App = () => {
     }
   }, [])
 
-  const create = async (blog) => {
-    dispatch(createBlog(blog))
-  }
-
-  const addLike = async (blog) => {
-    dispatch(likeBlog(blog))
-  }
-
-  const remove = async (blog) => {
-    dispatch(removeBlog(blog))
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     loginFormRef.current.toggleVisibility()
@@ -58,11 +48,11 @@ const App = () => {
     window.location.reload(true)
   }
 
+
   return (
     <div>
       <h2>blogs</h2>
       <Notification />
-
       {!user && <Togglable buttonLabel="login" ref={loginFormRef}>
         <LoginForm
           handleLogin={handleLogin}
@@ -77,16 +67,15 @@ const App = () => {
           <p>{user.name} logged in</p><button onClick={handleLogout} id="logout" >log out</button>
         </div>
 
-        <BlogForm createBlog={create} />
       </>
 
 
       }
-      {blogs.map(blog =>
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/users' element={<User />} />
 
-        <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={remove} currentUser={user.username} />
-
-      )}
+      </Routes>
     </div>
   )
 }
