@@ -10,7 +10,7 @@ import HomePage from './components/HomePage'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
-
+import Blog from './components/Blog'
 import { signin } from './reducers/userReducer'
 
 const App = () => {
@@ -77,7 +77,7 @@ const App = () => {
         <Route path='/' element={<HomePage />} />
         <Route path='/users' element={<Users />} />
         <Route path='/users/:id' element={<User />} />
-
+        <Route path='/blogs/:id' element={<Blog />} />
       </Routes>
     </div>
   )

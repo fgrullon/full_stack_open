@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useMatch, Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-const Blog = ({ blog, addLike, removeBlog, currentUser }) => {
+const Blog = ({ addLike, removeBlog, currentUser }) => {
 
-  const [showDetail, setShowDetails] = useState(false)
+  const blogs = useSelector(state => state.blogs)
 
-  const hide = { display: showDetail ? 'none' : '' }
-  const show = { display: showDetail ? '' : 'none' }
+  const match = useMatch('/blogs/:id')
+  const blog = blogs ? blogs.find(b => b.id === match.params.id) : null
+
 
   const handleLike = (event) => {
     event.preventDefault()
@@ -20,38 +22,30 @@ const Blog = ({ blog, addLike, removeBlog, currentUser }) => {
       removeBlog(blog)
     }
   }
+  if(!blog){
+    return null
+  }
 
   return (
-    <div className="blog">
+    <div >
       <div className="titleAndAuthor">
-        {blog.title} {blog.author}
+        <h2>{blog.title} {blog.author}</h2>
 
-        <button
-          style={hide}
-          onClick={() => setShowDetails(!showDetail)}
-          className="showDetail"
-        >view</button>
-
-        <button
-          style={show}
-          onClick={() => setShowDetails(!showDetail)}
-          className="hideDetail"
-        >hide</button>
 
       </div>
-      <div style={show} className="otherDetails">
+      <div>
         <div>
-          {blog.url}
+          <Link to={blog.url}>{blog.url}</Link>
         </div>
         <div>
-          likes {blog.likes}
+          {blog.likes} likes
           <button
             onClick={handleLike}
             className="like"
           >like</button>
         </div>
         <div>
-          {blog.user.name}
+          added by {blog.user.name}
         </div>
       </div>
       <div>

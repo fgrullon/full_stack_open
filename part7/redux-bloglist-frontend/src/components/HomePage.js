@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
-import Blog from './Blog'
 import BlogForm from './BlogForm'
 import Notification from './Notification'
 import {  useDispatch, useSelector } from 'react-redux'
-import { initialBlogs, createBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
+import { initialBlogs, createBlog } from '../reducers/blogReducer'
 import {  login } from '../reducers/userReducer'
+import { Link } from 'react-router-dom'
 
 const HomePage = () => {
   const dispatch = useDispatch()
@@ -31,15 +31,6 @@ const HomePage = () => {
     dispatch(createBlog(blog))
   }
 
-  const addLike = async (blog) => {
-    dispatch(likeBlog(blog))
-  }
-
-  const remove = async (blog) => {
-    dispatch(removeBlog(blog))
-  }
-
-
 
   return (
     <div>
@@ -51,9 +42,9 @@ const HomePage = () => {
       </>}
 
       {blogs.map(blog =>
-
-        <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={remove} currentUser={user.username} />
-
+        <div key={blog.id} className="blogs">
+          <Link  className="blog" to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
+        </div>
       )}
     </div>
   )
