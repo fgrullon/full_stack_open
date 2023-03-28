@@ -8,7 +8,9 @@ import LoginForm from './components/LoginForm'
 
 import HomePage from './components/HomePage'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 import User from './components/User'
+
 import { signin } from './reducers/userReducer'
 
 const App = () => {
@@ -73,7 +75,8 @@ const App = () => {
       }
       <Routes>
         <Route path='/' element={<HomePage />} />
-        <Route path='/users' element={<User />} />
+        <Route path='/users' element={<Users />} />
+        <Route path='/users/:id' element={<User />} />
 
       </Routes>
     </div>
