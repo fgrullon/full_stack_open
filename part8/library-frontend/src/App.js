@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
@@ -11,16 +10,16 @@ const App = () => {
   return (
     <div>
       <div>
-        <Link to='authors'>authors</Link>
-        <Link to='books'>books</Link>
-        <Link to='add'>add book</Link>
+        <Link to='/authors'>authors</Link>
+        <Link to='/books'>books</Link>
+        <Link to='/add'>add book</Link>
 
       </div>
 
       <Routes>
-        <Route path='authors' element={<Authors />} />
-        <Route path='books' element={<Books />} />
-        <Route path='add' element={<NewBook />} />
+        <Route path='/authors' element={<Authors />} />
+        <Route path='/books' element={<Books />} />
+        <Route path='/add' element={<NewBook />} />
       </Routes>
 
     </div>
