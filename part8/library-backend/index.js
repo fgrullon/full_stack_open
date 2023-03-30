@@ -146,7 +146,7 @@ const resolvers = {
     Author : {
         name: (root) => root.name,
         born: (root) => root.born,
-        id: (root) => root.born,
+        id: (root) => root.id,
         bookCount: (root) => books.filter(b => b.author === root.name).length
 
     },
@@ -169,19 +169,7 @@ const resolvers = {
         }
     }
 }
-test = `
-mutation {
-    addBook(
-      title: "NoSQL Distilled",
-      author: "Martin Fowler",
-      published: 2012,
-      genres: ["database", "nosql"]
-    ) {
-      title,
-      author
-    }
-  }
-`
+
 const server = new ApolloServer({
     typeDefs,
     resolvers
