@@ -187,16 +187,47 @@ const resolvers = {
         addBook: async (root, args) => {
             const author = await Author.findOne({ name : args.author })
             const book = new Book({ ...args, author : author })
-            return book.save()
+            try {
+              return await book.save()
+            } catch (error) {
+              throw new GraphlQLError('Saving book failed', {
+                extension: {
+                  code: 'BAD_USER_INPUT',
+                  invalidArgs: args.name,
+                  error
+                }
+              })
+            }
         },
         addAuthor: async (root, args) => {
           const author = new Author({ ...args })
-          return author.save()
+          try {
+            return await author.save()
+          } catch (error) {
+            throw new GraphlQLError('Saving author failed', {
+              extension: {
+                code: 'BAD_USER_INPUT',
+                invalidArgs: args.name,
+                error
+              }
+            })
+          }
         },
         editAuthor: async (root, args) => {
             const author = await Author.findOne({ name: args.name })
             author.born = args.setBornTo
-            return author.save()
+            try {
+              return await author.save()
+            } catch (error) {
+              throw new GraphlQLError('Saving birth year failed', {
+                extension: {
+                  code: 'BAD_USER_INPUT',
+                  invalidArgs: args.name,
+                  error
+                }
+              })
+            }
+            
         }
     }
 }
