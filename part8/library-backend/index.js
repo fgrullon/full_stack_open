@@ -159,14 +159,18 @@ const resolvers = {
         bookCount: async () => Book.collection.countDocuments(),
         authorCount: async () => Author.collection.countDocuments(),
         allBooks: async (root, args) => {
-            let allbBooks = Book.find({})
+            let allBooks = await Book.find({}).populate('author')
             if(args.genre){
-                allbBooks = allbBooks.filter(b => b.genres.includes(args.genre))
+              allBooks = allBooks.filter(b => b.genres.includes(args.genre))
             }
+
             if(args.author){
-                allbBooks = allbBooks.filter(b => b.author === args.author)
+              allBooks = allBooks.filter(b => {
+                return b.author.name === args.author
+              })
             }
-            return allbBooks
+
+            return allBooks
         },
         allAuthors: async () => Author.find({})
     },
@@ -174,7 +178,9 @@ const resolvers = {
         name: (root) => root.name,
         born: (root) => root.born,
         id: (root) => root.id,
-        bookCount: (root) => Author.find({}).filter(b => b.author === root.name).length
+        bookCount: async (root, args) => {
+          return await Book.find({ "author" : root.id }).count()
+      }
 
     },
     Mutation: {
