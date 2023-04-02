@@ -3,13 +3,17 @@ import { ALL_AUTHORS, EDIT_BIRTH_YEAR } from '../Querys'
 import { useState } from 'react'
 import Select  from 'react-select'
 
-const Authors = () => {
+const Authors = ({ notify }) => {
   const [birthYear, setBirthYear] = useState('')
   const [selectedOption, setSelectedOption] = useState('')
 
   const result = useQuery(ALL_AUTHORS)
   const [updateBirnYear] = useMutation(EDIT_BIRTH_YEAR, {
-    refetchQueries: [ { query : ALL_AUTHORS } ]
+    refetchQueries: [ { query : ALL_AUTHORS } ],
+    onError: (error) => {
+      const message = error.graphQLErrors[0].message
+      notify(message)
+    }
   })
 
   if (result.loading) {
@@ -27,10 +31,11 @@ const Authors = () => {
   const submit = (e) => {
     e.preventDefault();
 
-    updateBirnYear({ variables : { 
+      updateBirnYear({ variables : { 
         name : selectedOption.name, 
         setBornTo : Number(birthYear) 
-    }})
+      }})
+  
 
   }
 
@@ -45,7 +50,7 @@ const Authors = () => {
             <th>books</th>
           </tr>
           {authors.map((a) => (
-            <tr key={a.name}>
+            <tr key={a.id}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
