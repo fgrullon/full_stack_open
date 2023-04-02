@@ -1,9 +1,9 @@
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
-
+import Menu from './components/Menu'
 const Notify = ({ errorMessage }) => {
 
   if(!errorMessage){
@@ -30,12 +30,7 @@ const App = () => {
   console.log(notify)
   return (
     <div>
-      <div>
-        <Link to='/authors'>authors</Link>
-        <Link to='/books'>books</Link>
-        <Link to='/add'>add book</Link>
-
-      </div>
+      <Menu />
       <Notify errorMessage={errorMessage} />
       <Routes>
         <Route path='/authors' element={<Authors notify={notify } />}  />
