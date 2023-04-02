@@ -4,21 +4,14 @@ import NewBook from './components/NewBook'
 import { Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
 import Menu from './components/Menu'
-const Notify = ({ errorMessage }) => {
-
-  if(!errorMessage){
-    return null
-  }
-
-  return (
-    <div style={{ color : 'red' }}>
-      { errorMessage }
-    </div>
-  )
-}
+import Notify from './components/Notify'
+import LoginForm from './components/LoginForm'
+import { useApolloClient } from '@apollo/client'
 
 const App = () => {
 
+  const [token, setToken] = useState('')
+  const client = useApolloClient
   const [errorMessage, setErrorMessage] = useState('')
 
   const notify = ( message ) => {
@@ -27,15 +20,31 @@ const App = () => {
       setErrorMessage('')
     }, 5000)
   }
-  console.log(notify)
+
+  const logout = () => {
+    setToken('')
+    localStorage.clear()
+    client.resetStore()
+  }
+
+  if(!token){
+    return (
+      <>
+        <Notify errorMessage={errorMessage} />
+        <LoginForm setToken={setToken} notify={notify}  />
+      </>
+    )
+  }
+
   return (
     <div>
-      <Menu />
+      <Menu logout={logout} />
       <Notify errorMessage={errorMessage} />
       <Routes>
         <Route path='/authors' element={<Authors notify={notify } />}  />
         <Route path='/books' element={<Books />}  />
         <Route path='/add' element={<NewBook notify={notify} />}  />
+        <Route path='/login' element={<LoginForm notify={notify} setToken={setToken} />}  />
       </Routes>
 
     </div>
