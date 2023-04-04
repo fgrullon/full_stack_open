@@ -96,7 +96,6 @@ const resolvers = {
         bookCount: async () => Book.collection.countDocuments(),
         authorCount: async () => Author.collection.countDocuments(),
         allBooks: async (root, args) => {
-          console.log(args)
             let allBooks = await Book.find({}).populate('author')
             if(args.genre && args.genre !== 'all genres'){
               allBooks = allBooks.filter(b => b.genres.includes(args.genre))
@@ -129,7 +128,18 @@ const resolvers = {
             const author = await Author.findOne({ name : args.author })
             const book = new Book({ ...args, author : author })
 
+            const currentUser = context.currentUser
+
+            if(!currentUser){
+              throw new GraphQLError('not authenticated', {
+                extensions : {
+                  code : 'BAD_USER_INPUT'
+                }
+              })
+            }
+
             if(!author){
+
               try {
                 const newAuthor = new Author({ name : args.author })
                 return await newAuthor.save()
@@ -144,15 +154,6 @@ const resolvers = {
               }
             }
             
-            const currentUser = context.currentUser
-
-            if(!currentUser){
-              throw new GraphQLError('not authenticated', {
-                extensions : {
-                  code : 'BAD_USER_INPUT'
-                }
-              })
-            }
 
             try {
               return await book.save()
