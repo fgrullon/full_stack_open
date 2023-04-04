@@ -8,6 +8,7 @@ import Notify from './components/Notify'
 import LoginForm from './components/LoginForm'
 import { useApolloClient } from '@apollo/client'
 import { useNavigate } from 'react-router-dom'
+import Recomended from './components/Recomended'
 
 const App = () => {
 
@@ -48,6 +49,8 @@ const App = () => {
         <Route path='/books' element={<Books />}  />
         <Route path='/add' element={<NewBook notify={notify} />}  />
         <Route path='/login' element={<LoginForm notify={notify} setToken={setToken} />}  />
+        <Route path='/recomended' element={<Recomended />}  />
+
       </Routes>
 
     </div>

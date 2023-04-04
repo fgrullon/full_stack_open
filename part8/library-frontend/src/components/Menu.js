@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const Menu = ({ logout }) =>  {
 
     const user = localStorage.getItem('LoggedInUser')
-    console.log(user)
+
     return (
         <div>
             <AppBar  position="static">
@@ -14,6 +14,7 @@ const Menu = ({ logout }) =>  {
                     {user &&
                         <>
                             <Button  color="inherit" component={Link} to="/add">New Book</Button>
+                            <Button  color="inherit" component={Link} to="/recomended">Recomended</Button>
                             <Button onClick={logout} id="logout" color="inherit" > log out</Button>
                         </>
                     }
