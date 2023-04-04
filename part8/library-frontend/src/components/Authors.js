@@ -12,7 +12,7 @@ const Authors = ({ notify }) => {
     refetchQueries: [ { query : ALL_AUTHORS } ],
     onError: (error) => {
       const message = error.graphQLErrors[0].message
-      notify(message)
+      notify(message, 'error')
     }
   })
 

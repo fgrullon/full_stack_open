@@ -11,7 +11,7 @@ const LoginForm = ({ notify, setToken }) => {
     const navigate = useNavigate()
     const [login, result] = useMutation(LOGIN, {
         onError: (error) => {
-            notify(error.graphQLErrors[0].message)
+            notify(error.graphQLErrors[0].message, 'error')
         }
     })
 

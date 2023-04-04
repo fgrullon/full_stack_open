@@ -1,9 +1,8 @@
 import { GET_USER, ALL_BOOKS_BY_GENRE } from '../Querys'
 import { useQuery } from '@apollo/client'
 import { useState, useEffect } from 'react'
-import Notify from './Notify'
 
-const Recomended = () => {
+const Recomended = ({ notify }) => {
 
     const result = useQuery(GET_USER)
     const [favoriteGenre, setFavoriteGenre] = useState('')
@@ -23,7 +22,7 @@ const Recomended = () => {
     }
   
     if(error){
-      <Notify errorMessage={error} />
+      notify(error , 'error')
     }
 
     return (

@@ -17,7 +17,7 @@ const NewBook = ({ notify }) => {
     ],
     onError: (error) => {
       const message = error.graphQLErrors[0].message
-      notify(message)
+      notify(message, 'error')
     }
   })
 

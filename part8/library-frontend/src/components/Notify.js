@@ -1,12 +1,17 @@
-const Notify = ({ errorMessage }) => {
+import { Alert } from '@mui/material'
+
+const Notify = ({ errorMessage, severity }) => {
+
 
     if(!errorMessage){
       return null
     }
-  
+
     return (
-      <div style={{ color : 'red' }}>
-        { errorMessage }
+      <div>
+        <Alert severity={severity}>
+          { errorMessage }
+        </Alert>
       </div>
     )
 }

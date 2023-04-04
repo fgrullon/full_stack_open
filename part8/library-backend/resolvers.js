@@ -40,8 +40,7 @@ const resolvers = {
     },
     Mutation: {
         addBook: async (root, args, context) => {
-            const author = await Author.findOne({ name : args.author })
-            const book = new Book({ ...args, author : author })
+            let author = await Author.findOne({ name : args.author })
 
             const currentUser = context.currentUser
 
@@ -54,10 +53,10 @@ const resolvers = {
             }
 
             if(!author){
-
+              author = new Author({ name : args.author })
+              await author.save()
               try {
-                const newAuthor = new Author({ name : args.author })
-                await newAuthor.save()
+             
               } catch (error) {
                 throw new GraphQLError('creating author failed', {
                   extension: {
@@ -69,6 +68,7 @@ const resolvers = {
               }
             }
             
+            const book = new Book({ ...args, author : author })
 
             try {
               await book.save()

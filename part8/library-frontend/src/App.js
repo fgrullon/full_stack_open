@@ -9,20 +9,34 @@ import LoginForm from './components/LoginForm'
 import { useApolloClient } from '@apollo/client'
 import { useNavigate } from 'react-router-dom'
 import Recomended from './components/Recomended'
+import { useSubscription } from '@apollo/client'
+import { BOOK_ADDED } from './Querys'
 
 const App = () => {
 
   const [token, setToken] = useState('')
   const client = useApolloClient()
   const [errorMessage, setErrorMessage] = useState('')
+  const [severity, setSeverity] = useState('')
+
   const navigate = useNavigate()
 
-  const notify = ( message ) => {
+  const notify = ( message, severity ) => {
+    setSeverity(severity)
     setErrorMessage(message)
     setTimeout(() => {
       setErrorMessage('')
+      setSeverity('')
     }, 5000)
   }
+
+  useSubscription(BOOK_ADDED, {
+    onData : ({ data }) => {
+      notify(`New book added ${data.data.bookAdded.title} by ${data.data.bookAdded.author.name} `, 'success')
+    }
+  })
+
+
 
   const logout = () => {
     setToken('')
@@ -31,25 +45,17 @@ const App = () => {
     navigate('/books')
   }
 
-  // if(!token){
-  //   return (
-  //     <>
-  //       <Notify errorMessage={errorMessage} />
-  //       <LoginForm setToken={setToken} notify={notify}  />
-  //     </>
-  //   )
-  // }
 
   return (
     <div>
       <Menu logout={logout} />
-      <Notify errorMessage={errorMessage} />
+      <Notify errorMessage={errorMessage} severity={severity} />
       <Routes>
-        <Route path='/authors' element={<Authors notify={notify } />}  />
-        <Route path='/books' element={<Books />}  />
+        <Route path='/authors' element={<Authors notify={notify} />}  />
+        <Route path='/books' element={<Books notify={notify} />}  />
         <Route path='/add' element={<NewBook notify={notify} />}  />
         <Route path='/login' element={<LoginForm notify={notify} setToken={setToken} />}  />
-        <Route path='/recomended' element={<Recomended />}  />
+        <Route path='/recomended' element={<Recomended notify={notify} />}  />
 
       </Routes>
 

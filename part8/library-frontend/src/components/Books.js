@@ -1,9 +1,8 @@
 import { ALL_BOOKS, ALL_BOOKS_BY_GENRE } from '../Querys'
 import { useQuery } from '@apollo/client'
 import { useState, useEffect } from 'react'
-import Notify from './Notify'
 
-const Books = () => {
+const Books = ({ notify }) => {
 
   const [genres, setGenres] = useState([])
   const [genre] = useState('all genres')
@@ -29,7 +28,7 @@ const Books = () => {
   }
 
   if(error){
-    <Notify errorMessage={error} />
+    notify(error, 'error')
   }
 
   if(!data){
