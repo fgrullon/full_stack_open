@@ -1,27 +1,30 @@
-import { GET_USER, ALL_BOOKS } from '../Querys'
+import { GET_USER, ALL_BOOKS_BY_GENRE } from '../Querys'
 import { useQuery } from '@apollo/client'
 import { useState, useEffect } from 'react'
+import Notify from './Notify'
 
 const Recomended = () => {
 
     const result = useQuery(GET_USER)
     const [favoriteGenre, setFavoriteGenre] = useState('')
-    const { data } = useQuery(ALL_BOOKS)
-    const [books, setBooks] = useState([])
+
+    const { loading, error, data } = useQuery(ALL_BOOKS_BY_GENRE, {
+      variables: { genre : favoriteGenre }
+    })
 
     useEffect(() => {
         if(result.data){
             setFavoriteGenre(result.data.me.favoriteGenre)
         }
-    }, [result.data])
+    }, [result.data]) // eslint-disable-line
 
-    useEffect(() => {
-        if(data && favoriteGenre){
-            setBooks(data.allBooks.filter(b => b.genres.includes(favoriteGenre)))
-        }
-    }, [data])
-
-
+    if(loading){
+      return <div>Loading...</div>
+    }
+  
+    if(error){
+      <Notify errorMessage={error} />
+    }
 
     return (
         <div>
@@ -34,7 +37,7 @@ const Recomended = () => {
                 <th>author</th>
                 <th>published</th>
               </tr>
-              {books.map((a) => (
+              {data.allBooks.map((a) => (
                 <tr key={a.title}>
                   <td>{a.title}</td>
                   <td>{a.author.name}</td>
