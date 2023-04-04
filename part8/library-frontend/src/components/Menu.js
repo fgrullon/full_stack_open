@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 const Menu = ({ logout }) =>  {
 
     const user = localStorage.getItem('LoggedInUser')
-
     console.log(user)
     return (
         <div>
@@ -12,11 +11,14 @@ const Menu = ({ logout }) =>  {
                 <Toolbar>
                     <Button  color="inherit" component={Link} to="/authors">Authors</Button>
                     <Button  color="inherit" component={Link} to="/books">Books</Button>
-                    <Button  color="inherit" component={Link} to="/add">New Book</Button>
-                    {!user && <Button  color="inherit" component={Link} to="/login">Log in</Button>}
                     {user &&
-                        <Button onClick={logout} id="logout" color="inherit" > log out</Button>
+                        <>
+                            <Button  color="inherit" component={Link} to="/add">New Book</Button>
+                            <Button onClick={logout} id="logout" color="inherit" > log out</Button>
+                        </>
                     }
+                    {!user && <Button  color="inherit" component={Link} to="/login">Log in</Button>}
+
                 </Toolbar>
             </AppBar>
         </div>

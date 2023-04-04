@@ -7,12 +7,14 @@ import Menu from './components/Menu'
 import Notify from './components/Notify'
 import LoginForm from './components/LoginForm'
 import { useApolloClient } from '@apollo/client'
+import { useNavigate } from 'react-router-dom'
 
 const App = () => {
 
   const [token, setToken] = useState('')
-  const client = useApolloClient
+  const client = useApolloClient()
   const [errorMessage, setErrorMessage] = useState('')
+  const navigate = useNavigate()
 
   const notify = ( message ) => {
     setErrorMessage(message)
@@ -25,16 +27,17 @@ const App = () => {
     setToken('')
     localStorage.clear()
     client.resetStore()
+    navigate('/books')
   }
 
-  if(!token){
-    return (
-      <>
-        <Notify errorMessage={errorMessage} />
-        <LoginForm setToken={setToken} notify={notify}  />
-      </>
-    )
-  }
+  // if(!token){
+  //   return (
+  //     <>
+  //       <Notify errorMessage={errorMessage} />
+  //       <LoginForm setToken={setToken} notify={notify}  />
+  //     </>
+  //   )
+  // }
 
   return (
     <div>

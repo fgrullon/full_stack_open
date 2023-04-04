@@ -100,7 +100,7 @@ const resolvers = {
             if(args.genre){
               allBooks = allBooks.filter(b => b.genres.includes(args.genre))
             }
-            console.log(allBooks)
+
             if(args.author){
               allBooks = allBooks.filter(b => {
                 if(b.author?.name){

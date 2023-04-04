@@ -20,13 +20,13 @@ const LoginForm = ({ notify, setToken }) => {
             const token = result.data.login.value
             setToken(token)
             localStorage.setItem('LoggedInUser', token)
+            navigate('/books')
         }
     }, [result.data]) // eslint-disable-line
 
     const submit = (event) => {
         event.preventDefault();
         login( { variables : { username , password } } )
-        navigate('/books')
 
     }
 
