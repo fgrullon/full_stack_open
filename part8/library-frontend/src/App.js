@@ -1,16 +1,13 @@
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import Menu from './components/Menu'
 import Notify from './components/Notify'
 import LoginForm from './components/LoginForm'
-import { useApolloClient } from '@apollo/client'
-import { useNavigate } from 'react-router-dom'
 import Recomended from './components/Recomended'
-import { useSubscription } from '@apollo/client'
-import { BOOK_ADDED } from './Querys'
+import { useApolloClient} from '@apollo/client'
 
 const App = () => {
 
@@ -29,14 +26,6 @@ const App = () => {
       setSeverity('')
     }, 5000)
   }
-
-  useSubscription(BOOK_ADDED, {
-    onData : ({ data }) => {
-      notify(`New book added ${data.data.bookAdded.title} by ${data.data.bookAdded.author.name} `, 'success')
-    }
-  })
-
-
 
   const logout = () => {
     setToken('')
