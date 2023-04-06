@@ -26,18 +26,38 @@ const resolvers = {
 
             return allBooks
         },
-        allAuthors: async () => Author.find({}),
+        // allAuthors: async () => Author.find({}),
+        allAuthors: async () => {
+
+          const res = await Author.aggregate([{
+            $lookup: {
+              from: "books",
+              localField: "_id",
+              foreignField: "author",
+              as: "books"
+            }
+          }, {
+            $project: {
+              _id: 0,
+              id: "$_id",
+              name: 1,
+              born: 1,
+              bookCount: { $size: "$books" }
+            }
+          }])
+          return res
+        },
         me: async (root, args, context) => context.currentUser
     },
-    Author : {
-        name: (root) => root.name,
-        born: (root) => root.born,
-        id: (root) => root.id,
-        bookCount: async (root, args) => {
-          return await Book.find({ "author" : root.id }).count()
-      }
+    // Author : {
+    //     name: (root) => root.name,
+    //     born: (root) => root.born,
+    //     id: (root) => root.id,
+    //     bookCount: async (root, args) => {
+    //       return await Book.find({ "author" : root.id }).count()
+    //   }
 
-    },
+    // },
     Mutation: {
         addBook: async (root, args, context) => {
             let author = await Author.findOne({ name : args.author })
