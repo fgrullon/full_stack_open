@@ -1,3 +1,5 @@
+import { getCMDWeekHoursArgs } from "./utils";
+
 interface exerciseResult {
   periodLength: number;
   trainingDays: number;
@@ -7,6 +9,7 @@ interface exerciseResult {
   target: number;
   average: number;
 }
+
 
 const calculateExercises = (exerciseHours : number[], target : number): exerciseResult => {
 
@@ -38,4 +41,14 @@ const calculateExercises = (exerciseHours : number[], target : number): exercise
  
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+
+try {
+    const { weekHours, target } = getCMDWeekHoursArgs(process.argv);
+    console.log(calculateExercises(weekHours, target));
+} catch (error : unknown) {
+    let errorMessage = 'Something wrong happened';
+    if(error instanceof Error){
+        errorMessage += 'Error ' + error.message
+    }
+    console.log(errorMessage)
+}

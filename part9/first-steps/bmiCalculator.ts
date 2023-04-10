@@ -1,22 +1,4 @@
-
-interface bmiValues {
-    height : number;
-    weight : number;
-}
-
-const partArguments = ( args : string[] ) : bmiValues => {
-    if(args.length < 4) throw new Error('Not enough arguments')
-    if(args.length > 4) throw new Error('Too many arguments')
-
-    if(!isNaN(Number(args[2])) && !isNaN(Number(args[3]))){
-        return {
-            height : Number(args[2]),
-            weight : Number(args[3])
-        }
-    }else{
-        throw new Error('Provided values were not numbers!')
-    }
-}   
+import { parsrBMIArguments } from "./utils";
 
 const calculateBmi = (weight : number, height : number ) : string => {
     const result = weight / (height * 0.01) ** 2;
@@ -42,7 +24,7 @@ const calculateBmi = (weight : number, height : number ) : string => {
 
 
 try {
-    const {height, weight} = partArguments(process.argv);
+    const {height, weight} = parsrBMIArguments(process.argv);
     console.log(calculateBmi(weight, height));
 } catch (error : unknown) {
     let errorMessage = 'Something wrong happened';
