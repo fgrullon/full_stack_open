@@ -15,7 +15,7 @@ const calculateExercises = (exerciseHours : number[], target : number): exercise
 
     const periodLength = exerciseHours.length;
     const trainingDays = exerciseHours.filter(d => d > 0).length;
-    const average = exerciseHours.reduce((a,b) => a + b) / periodLength
+    const average = exerciseHours.reduce((a,b) => a + b) / periodLength;
     const success = average >= target;
     let rating;
     let ratingDescription;
@@ -26,7 +26,7 @@ const calculateExercises = (exerciseHours : number[], target : number): exercise
         rating = 2;
         ratingDescription = 'Well done';
     }else{
-        rating = 3
+        rating = 3;
         ratingDescription = 'Good job! you did exercise more than you planned';
     }
     return {
@@ -37,9 +37,9 @@ const calculateExercises = (exerciseHours : number[], target : number): exercise
         ratingDescription,
         target,
         average
-    }
+    };
  
-}
+};
 
 
 try {
@@ -48,7 +48,7 @@ try {
 } catch (error : unknown) {
     let errorMessage = 'Something wrong happened';
     if(error instanceof Error){
-        errorMessage += 'Error ' + error.message
+        errorMessage += 'Error ' + error.message;
     }
-    console.log(errorMessage)
+    console.log(errorMessage);
 }

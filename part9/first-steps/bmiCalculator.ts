@@ -19,7 +19,7 @@ export const calculateBmi = (weight : number, height : number ) : string => {
     }else {
         return 'Underweight (Severe thinness)';
     }
-}
+};
 
 
 try {
@@ -28,7 +28,7 @@ try {
 } catch (error : unknown) {
     let errorMessage = 'Something wrong happened';
     if(error instanceof Error){
-        errorMessage += 'Error ' + error.message
+        errorMessage += 'Error ' + error.message;
     }
-    console.log(errorMessage)
+    console.log(errorMessage);
 }
