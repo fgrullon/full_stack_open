@@ -11,7 +11,7 @@ const checkArrayOnlyNumber = (arr : any[]) => {
 
 export const getCMDWeekHoursArgs = ( args : string[] ): exerciseArgs => {
 
-    const hoursArray = args.filter((a, idx) => idx > 2 && idx < 10).map(a => parseFloat(a))
+    const hoursArray = args.filter((_a, idx) => idx > 2 && idx < 10).map(a => parseFloat(a))
 
     if(checkArrayOnlyNumber(hoursArray)){
         return {

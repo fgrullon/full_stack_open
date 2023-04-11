@@ -1,8 +1,7 @@
 import { parsrBMIArguments } from "./utils";
 
-const calculateBmi = (weight : number, height : number ) : string => {
+export const calculateBmi = (weight : number, height : number ) : string => {
     const result = weight / (height * 0.01) ** 2;
-    console.log(`weight(${weight}) / (height(${height})) = ${result}`)
     if(result > 40){
         return 'Obese (Class III)';
     }else if(result >= 35.0  && result <= 39.9){
