@@ -11,7 +11,7 @@ interface exerciseResult {
 }
 
 
-const calculateExercises = (exerciseHours : number[], target : number): exerciseResult => {
+export const calculateExercises = (exerciseHours : number[], target : number): exerciseResult => {
 
     const periodLength = exerciseHours.length;
     const trainingDays = exerciseHours.filter(d => d > 0).length;
@@ -43,8 +43,8 @@ const calculateExercises = (exerciseHours : number[], target : number): exercise
 
 
 try {
-    const { weekHours, target } = getCMDWeekHoursArgs(process.argv);
-    console.log(calculateExercises(weekHours, target));
+    const { weekHours, targetHours } = getCMDWeekHoursArgs(process.argv);
+    console.log(calculateExercises(weekHours, targetHours));
 } catch (error : unknown) {
     let errorMessage = 'Something wrong happened';
     if(error instanceof Error){

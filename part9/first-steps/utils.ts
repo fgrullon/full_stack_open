@@ -1,6 +1,6 @@
 interface exerciseArgs {
     weekHours : number [];
-    target : number;
+    targetHours : number;
 }
 
 const checkArrayOnlyNumber = (arr : number[]) => {
@@ -16,7 +16,23 @@ export const getCMDWeekHoursArgs = ( args : string[] ): exerciseArgs => {
     if(checkArrayOnlyNumber(hoursArray)){
         return {
             weekHours : hoursArray,
-            target : Number(args[2])
+            targetHours : parseInt(args[2])
+        };
+    }else{
+        throw new Error('Week hours expected to be number other type found');
+    }
+
+
+};
+
+export const checkPostParams = ( hours : number[], target : number ): exerciseArgs => {
+
+    const hoursArray = hours.filter((_a, idx) => idx > 2 && idx < 10).map(a => a);
+
+    if(checkArrayOnlyNumber(hours)){
+        return {
+            weekHours : hoursArray,
+            targetHours : target
         };
     }else{
         throw new Error('Week hours expected to be number other type found');
