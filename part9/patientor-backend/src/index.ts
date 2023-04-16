@@ -5,11 +5,11 @@ import DiagnoseRoutes from '../src/routes/DiagnoseRoutes';
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.get('/api/ping', (req, res) => {
+app.get('/ping', (req, res) => {
     res.send('pong');
 });
 
-app.get('/api/diagnose', DiagnoseRoutes);
+app.use('/api/diagnoses', DiagnoseRoutes);
 
 
 
