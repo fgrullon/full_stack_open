@@ -4,3 +4,13 @@ export interface DiagnoseType {
     latin? : string;
 }
 
+export interface PatientType {
+    id : string;
+    name : string;
+    dateOfBirth : string;
+    gender : string;
+    occupation : string;
+    ssn : string;
+}
+
+export type NonSensitivePatientEntry = Omit<PatientType, 'ssn'>;

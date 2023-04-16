@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import DiagnoseRoutes from '../src/routes/DiagnoseRoutes';
+import PatientsRoutes from '../src/routes/PatientsRoutes';
 
 const app = express();
 app.use(express.json());
@@ -11,7 +12,7 @@ app.get('/ping', (req, res) => {
 
 app.use('/api/diagnoses', DiagnoseRoutes);
 
-
+app.use('/api/patients', PatientsRoutes);
 
 const PORT = 3001;
 
