@@ -1,11 +1,11 @@
 import { CoursePart } from '../types';
 
 interface PartProps {
-    part : CoursePart
+    part : CoursePart;
 }
 
-const Part = ( props: PartProps  ) => {
-    console.log(props)
+const Part = ( { part }: PartProps  ) => {
+    console.log(part)
     return (<></>);
     // switch (props.kind) {
     //     case 'basic':
