@@ -1,4 +1,4 @@
-
+import Part from './Part';
 
 interface Part {
     name : string,
@@ -15,7 +15,8 @@ const Content = ( props: ContentProps ) => {
         <div>
         {
             props.parts.map(p => { 
-                return  <p key={p.name}> { p.name } { p.exerciseCount } </p>
+                return <Part key={p.name} part={p} />
+                // return  <p key={p.name}> { p.name } { p.exerciseCount } </p>
             })
         }
 
