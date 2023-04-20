@@ -25,21 +25,14 @@ const Part = ( { part }: PartProps  ) => {
             );
             
             break;
-    
+        case 'group' :
+            return (1);
+        case 'background':
+            return(2);
         default:
             break;
     }
-    console.log(part)
-    return (<></>);
-    // switch (props.kind) {
-    //     case 'basic':
-    //         return ({ props.name} )
-    //     case 'group':
-    //         return ({ props} )
-    //     case 'background':
-    //         return ({ props} )
-    //     default:
-    //         break;
+
 }
 
 export default Part;
