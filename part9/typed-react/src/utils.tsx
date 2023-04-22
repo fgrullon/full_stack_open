@@ -1,4 +1,4 @@
-const unhandleSwitchCase( value : never): never => {
+const unhandleSwitchCase = ( value : never): never => {
     throw new Error(`Undlandled switch case: ${JSON.stringify(value)}`);
 }
 

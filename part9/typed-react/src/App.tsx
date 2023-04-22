@@ -1,10 +1,10 @@
 import Header from './components/Header';
 import Content from './components/Content';
 import Total from './components/Total';
-
-const App = () => {
+import { CoursePart } from './types';
+const App = ():JSX.Element =>  {
   const courseName = 'Half Stack application development';
-  const courseParts = [
+  const courseParts: CoursePart[] = [
     {
       name: "Fundamentals",
       exerciseCount: 10,

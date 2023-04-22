@@ -5,15 +5,21 @@ interface PartProps {
     part : CoursePart;
 }
 
-const Header = ({ text } : { text : string }) => {
+const Header = ({ text } : { text : string }): JSX.Element => {
     return <h3>{ text }</h3>
 }
 
-const Description = ({ text }: { text : string}) => {
+const Description = ({ text }: { text : string }): JSX.Element => {
     return <div>{ text }</div>
 }
 
-const Part = ( { part }: PartProps  ) => {
+const ProjectCount = ({ text }: { text : number }): JSX.Element => {
+    return <div>{ text }</div>
+}
+
+
+
+const Part = ( { part }: PartProps  ): JSX.Element => {
 
     switch (part.kind) {
         case 'basic':
@@ -23,14 +29,23 @@ const Part = ( { part }: PartProps  ) => {
                     <Description text={part.description}/>
                 </>
             );
-            
-            break;
         case 'group' :
-            return (1);
+            return(
+                <>
+                    <Header text={`${part.name} ${part.exerciseCount}`}/>
+                    <ProjectCount text={part.groupProjectCount}/>
+                </>
+            );
+            return <></>;
         case 'background':
-            return(2);
+            return(
+                <>
+                    <Header text={`${part.name} ${part.exerciseCount}`}/>
+                    <Description text={part.backgroundMaterial}/>
+                </>
+            );        
         default:
-            break;
+            return unhandleSwitchCase(part);
     }
 
 }

@@ -8,7 +8,7 @@ interface TotalProps {
     parts : Part[]
 }
 
-const Total = ( props: TotalProps ) => {
+const Total = ( props: TotalProps ): JSX.Element => {
 
     return (
         <>

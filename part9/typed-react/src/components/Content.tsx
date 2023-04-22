@@ -5,7 +5,7 @@ interface ContentProps {
     parts : Array<CoursePart>;
 }
 
-const Content = ( { parts }: ContentProps ) => {
+const Content = ( { parts }: ContentProps ): JSX.Element => {
 
     return (
         <div>
