@@ -8,6 +8,11 @@ interface CoursePartDescription extends CoursePartBase {
     description : string;
 }
 
+interface CoursePartRequirements extends CoursePartDescription {
+    requirements : string[];
+    kind : 'special';
+}
+
 interface CoursePartBasic extends  CoursePartDescription {
     kind : 'basic';
 }
@@ -23,7 +28,7 @@ interface CoursePartBackground extends CoursePartDescription {
 }
 
 
-type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartRequirements;
 
 export type { CoursePart };
 

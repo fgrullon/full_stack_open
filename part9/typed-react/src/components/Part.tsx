@@ -13,11 +13,6 @@ const Description = ({ text }: { text : string }): JSX.Element => {
     return <div>{ text }</div>
 }
 
-const ProjectCount = ({ text }: { text : number }): JSX.Element => {
-    return <div>{ text }</div>
-}
-
-
 
 const Part = ( { part }: PartProps  ): JSX.Element => {
 
@@ -33,7 +28,7 @@ const Part = ( { part }: PartProps  ): JSX.Element => {
             return(
                 <>
                     <Header text={`${part.name} ${part.exerciseCount}`}/>
-                    <ProjectCount text={part.groupProjectCount}/>
+                    <Description text={`project exercises ${part.groupProjectCount}`}/>
                 </>
             );
             return <></>;
@@ -41,9 +36,18 @@ const Part = ( { part }: PartProps  ): JSX.Element => {
             return(
                 <>
                     <Header text={`${part.name} ${part.exerciseCount}`}/>
-                    <Description text={part.backgroundMaterial}/>
+                    <Description text={part.description}/>
+                    <Description text={`submit to ${part.backgroundMaterial}`}/>
                 </>
-            );        
+            );      
+        case 'special':
+                return(
+                    <>
+                        <Header text={`${part.name} ${part.exerciseCount}`}/>
+                        <Description text={part.description}/>
+                        <Description text={`required skills: ${part.requirements.join(',')}`}/>
+                    </>
+                );        
         default:
             return unhandleSwitchCase(part);
     }

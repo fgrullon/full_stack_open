@@ -11,10 +11,10 @@ interface TotalProps {
 const Total = ( props: TotalProps ): JSX.Element => {
 
     return (
-        <>
+        <div>
         Number of exercises{' '}
         { props.parts.reduce((carry, part) => carry + part.exerciseCount, 0) }
-        </>
+        </div>
     );
 
 }
