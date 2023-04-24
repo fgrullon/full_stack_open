@@ -1,6 +1,18 @@
+import { Entry } from "../types";
 
-const Entry = ():JSX.Element => {
-    return <></>;
+interface EntryProps {
+    entry: Entry
 }
 
-export default Entry
+const DairyEntry = ({ entry }: EntryProps ):JSX.Element => {
+
+    return (
+        <div>
+            <h3>{ entry.date }</h3>
+            <div>visibility: { entry.visibility }</div>
+            <div>weather: { entry.weather }</div>
+        </div>
+    );
+}
+
+export default DairyEntry;
