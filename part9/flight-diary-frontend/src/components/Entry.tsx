@@ -11,6 +11,8 @@ const DairyEntry = ({ entry }: EntryProps ):JSX.Element => {
             <h3>{ entry.date }</h3>
             <div>visibility: { entry.visibility }</div>
             <div>weather: { entry.weather }</div>
+            <div>comment: { entry.comment }</div>
+
         </div>
     );
 }
