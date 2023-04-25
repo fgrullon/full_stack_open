@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import Dairy from './components/Dairy';
 import { getAllEntries } from './services/dairyService';
 import { Entry } from './types';
+import EntryForm from './components/EntryForm';
 const App = () => {
   const [Entries, setEntries] = useState<Entry[]>([])
 
@@ -10,7 +11,11 @@ const App = () => {
   },[]);
 
   return (
+  <>
+    <EntryForm />
     <Dairy entries={Entries} />
+  </>
+
   );
 }
 
