@@ -10,9 +10,12 @@ const App = () => {
     getAllEntries().then(data => setEntries(data));
   },[]);
 
+  const onSubmit = () => {
+    return 1
+  }
   return (
   <>
-    <EntryForm />
+    <EntryForm  onSubmit={onSubmit} />
     <Dairy entries={Entries} />
   </>
 
