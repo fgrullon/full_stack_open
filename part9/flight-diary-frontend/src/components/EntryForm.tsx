@@ -26,8 +26,8 @@ const weatherOptions: WeatherOption[] = Object.values(Weather).map(v => ({
 
 const EntryForm = ({ onSubmit }: Props):JSX.Element => {
     const [date, setDate] = useState('');
-    const [weather, setWeather] = useState('');
-    const [visibility, setVisibility] = useState('');
+    const [weather, setWeather] = useState<Weather>();
+    const [visibility, setVisibility] = useState<Visibility>();
     const [comment, setComment] = useState('');
 
     const onWeatherChange = (event: SelectChangeEvent<string>) => {
@@ -51,9 +51,14 @@ const EntryForm = ({ onSubmit }: Props):JSX.Element => {
           }
         }
     };
-    const handleSubmit = () => {
-        return 1
+
+    const handleSubmit = (event: SyntheticEvent) => {
+      event.preventDefault();
+      onSubmit({
+        date, weather, visibility, comment
+      })
     }
+
 
     return (
         <div style={{ width: 300 }}>
