@@ -1,28 +1,26 @@
 import {useEffect, useState} from 'react';
 import Dairy from './components/Dairy';
-import { getAllEntries } from './services/dairyService';
-import { Entry } from './types';
+import { Entry, NewEntry } from './types';
 import EntryForm from './components/EntryForm';
-import { createEntry } from '../services/dairyService';
+import dairyService from './services/dairyService';
 
 const App = () => {
   const [Entries, setEntries] = useState<Entry[]>([])
 
   useEffect(() => {
-    getAllEntries().then(data => setEntries(data));
+    const fetchEntries = async () => {
+      const result = await dairyService.getAllEntries();
+      setEntries(result);
+    };
+    void fetchEntries();
   },[]);
 
-  const handleSubmit = async (event: SyntheticEvent) => {
-    event.preventDefault();
-    const values = {
-      date,
-      weather,
-      visibility,
-      comment
-    }
+  const handleSubmit = async (values: NewEntry) => {
+  
     try {
-      const entry = createEntry(values);
-      setEntries(Entries.concat(entry));
+      const result = await dairyService.createEntry(values);
+
+      setEntries(Entries.concat(result));
     } catch (e: unknown) {
       console.error("Unknown error", e);
     }

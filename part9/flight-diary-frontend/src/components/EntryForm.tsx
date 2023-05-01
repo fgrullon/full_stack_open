@@ -1,5 +1,5 @@
 import { NewEntry, Visibility, Weather } from "../types";
-import { useState } from 'react';
+import { useState, SyntheticEvent } from 'react';
 import {  TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from '@mui/material';
 
 interface Props {
@@ -26,8 +26,8 @@ const weatherOptions: WeatherOption[] = Object.values(Weather).map(v => ({
 
 const EntryForm = ({ onSubmit }: Props):JSX.Element => {
     const [date, setDate] = useState('');
-    const [weather, setWeather] = useState<Weather>();
-    const [visibility, setVisibility] = useState<Visibility>();
+    const [weather, setWeather] = useState<Weather>(weatherOptions[0].value);
+    const [visibility, setVisibility] = useState<Visibility>(visibilityOptions[0].value);
     const [comment, setComment] = useState('');
 
     const onWeatherChange = (event: SelectChangeEvent<string>) => {
@@ -54,9 +54,7 @@ const EntryForm = ({ onSubmit }: Props):JSX.Element => {
 
     const handleSubmit = (event: SyntheticEvent) => {
       event.preventDefault();
-      onSubmit({
-        date, weather, visibility, comment
-      })
+      onSubmit({ date, weather, visibility, comment });
     }
 
 
