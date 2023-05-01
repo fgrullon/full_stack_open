@@ -1,11 +1,13 @@
 import {useEffect, useState} from 'react';
 import Dairy from './components/Dairy';
-import { Entry, NewEntry } from './types';
+import { Entry, NewEntry, Message } from './types';
 import EntryForm from './components/EntryForm';
 import dairyService from './services/dairyService';
+import Notification from './components/Notification';
 
 const App = () => {
   const [Entries, setEntries] = useState<Entry[]>([])
+  const [message, setMessage] = useState<Message>()
 
   useEffect(() => {
     const fetchEntries = async () => {
