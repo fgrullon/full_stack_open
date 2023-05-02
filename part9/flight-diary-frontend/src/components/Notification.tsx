@@ -1,10 +1,13 @@
-import { Message } from "../types";
 
-const Notification = (message: Message ):JSX.Element  => {
-    if(!message){
+interface Props {
+    error?: string;
+}
+
+const Notification = ({error}: Props ):JSX.Element  => {
+    if(!error){
         return <></>
     }
-    return <h2>{ message.message }</h2>
+    return <h2 style={{ color: "red" }}>{ error }</h2>
 }
 
 export default Notification;

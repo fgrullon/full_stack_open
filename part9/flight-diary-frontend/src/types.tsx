@@ -23,7 +23,3 @@ export interface Entry {
  
 export type NewEntry = Omit<Entry, 'id'>;
 
-export interface Message {
-  message: string;
-  type: string;
-}
