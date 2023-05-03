@@ -1,6 +1,6 @@
 import { NewEntry, Visibility, Weather } from "../types";
-import { useState, SyntheticEvent } from 'react';
-import {  TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from '@mui/material';
+import React, { useState, SyntheticEvent } from 'react';
+import {  TextField, InputLabel, Grid, Button, SelectChangeEvent, Radio } from '@mui/material';
 
 interface Props {
     onSubmit: (values: NewEntry) => void;
@@ -59,48 +59,56 @@ const EntryForm = ({ onSubmit }: Props):JSX.Element => {
 
 
     return (
-        <div style={{ width: 300 }}>
+        <div style={{ width: 500 }}>
             <h2>Add new entry</h2>
             <form onSubmit={handleSubmit}>
+     
+
+
+        
+   <Grid>
+        <Grid item>
+        <h4>Weather</h4>
+        {weatherOptions.map(option =>
+          <div key={option.label} style={{ 'float': 'left','width': 80 }}>
+            <InputLabel >{option.label}</InputLabel>
+            <Radio
+              checked={weather === option.value}
+              onChange={onWeatherChange}
+              
+              value={option.value}
+              name="radio-buttons"
+              inputProps={{ 'aria-label': 'A' }}
+            />
+            </div>
+          )}
+        </Grid>
         <TextField
             label="Date"
+            type="date"
             fullWidth 
             value={date}
             onChange={({ target }) => setDate(target.value)}
         />
-        <InputLabel style={{ marginTop: 20 }}>Weather</InputLabel>
-        <Select
-          label="Weather"
-          fullWidth
-          value={weather}
-          onChange={onWeatherChange}
-        >
-        {weatherOptions.map(option =>
-          <MenuItem
-            key={option.label}
-            value={option.value}
-          >
-            {option.label
-          }</MenuItem>
-        )}
-        </Select>
-
-        <InputLabel style={{ marginTop: 20 }}>Visibility</InputLabel>
-        <Select
-          label="Visibility"
-          fullWidth
-          value={visibility}
-          onChange={onVisibilityChange}
-        >
-        {visibilityOptions.map(option =>
-          <MenuItem
-            key={option.label}
-            value={option.value}
-          >
-            {option.label
-          }</MenuItem>
-        )}
-        </Select>
+   
+        <Grid item>
+          <h4>Visibility</h4>
+          {visibilityOptions.map(option =>
+            <div key={option.label} style={{  'float': 'left', 'width': 80 }}>
+              <InputLabel >{option.label}</InputLabel>
+              <Radio
+                checked={visibility === option.value}
+                onChange={onVisibilityChange}
+                
+                value={option.value}
+                name="radio-buttons"
+                inputProps={{ 'aria-label': 'A' }}
+              />
+              </div>
+           )}
+        </Grid>
+    </Grid>
+   
         <TextField
             label="Comment"
             fullWidth 
