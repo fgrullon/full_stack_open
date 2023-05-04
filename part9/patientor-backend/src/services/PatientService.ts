@@ -2,11 +2,10 @@
 import Patients from '../data/patients';
 import { PatientType, NonSensitivePatientEntry, NewPatientType } from '../types';
 import { v1 as uuid } from 'uuid';
+import { nonSensitivePatientEntry } from '../utils';
 
 const getPatients = (): NonSensitivePatientEntry[] => {
-    return Patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
-        id, name, dateOfBirth, gender, occupation
-    }));
+    return Patients.map(patient => nonSensitivePatientEntry(patient) );
 }
 
 const addPatient = (
