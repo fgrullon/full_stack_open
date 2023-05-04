@@ -10,6 +10,9 @@ const router = express_1.default.Router();
 router.get('/', (_req, res) => {
     res.send(PatientService_1.default.getPatients());
 });
+router.get('/:id', (req, res) => {
+    res.send(PatientService_1.default.getPatient(req.body.id));
+});
 router.post('/', (req, res) => {
     try {
         const newEntry = (0, utils_1.toNewPatientEntry)(req.body);

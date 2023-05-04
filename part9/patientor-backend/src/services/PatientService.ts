@@ -8,6 +8,11 @@ const getPatients = (): NonSensitivePatientEntry[] => {
     return Patients.map(patient => nonSensitivePatientEntry(patient) );
 }
 
+const getPatient = (id: string): NonSensitivePatientEntry => {
+    const patient = Patients.filter(patient => patient.id === id );
+    return nonSensitivePatientEntry(patient);
+}
+
 const addPatient = (
     newEntry: NewPatientType
     ) : PatientType => {
@@ -24,5 +29,6 @@ const addPatient = (
 
 export default {
     getPatients,
-    addPatient
+    addPatient,
+    getPatient
 }
