@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.nonSensitivePatientEntry = exports.toNewPatientEntry = void 0;
 const types_1 = require("./types");
+class Entry {
+}
 const isString = (text) => {
     return typeof text === 'string' || text instanceof String;
 };
@@ -10,6 +12,12 @@ const isDate = (date) => {
 };
 const isGender = (param) => {
     return Object.values(types_1.Gender).map(v => v.toString()).includes(param);
+};
+const isEntries = (param) => {
+    if (Array.isArray(param)) {
+        return param.every(it => it instanceof Entry);
+    }
+    return false;
 };
 const parseId = (id) => {
     if (!id || !isString(id)) {
@@ -47,17 +55,24 @@ const parseOccupation = (occupation) => {
     }
     return occupation;
 };
+const parseEntries = (entries) => {
+    if (!entries || !isString(entries) || !isEntries(entries)) {
+        throw new Error('Incorrect or missing gender');
+    }
+    return entries;
+};
 const toNewPatientEntry = (entry) => {
     if (!entry || typeof entry !== 'object') {
         throw new Error('Incorrect or missing data');
     }
-    if ('name' in entry && 'dateOfBirth' in entry && 'gender' in entry && 'occupation' in entry && 'ssn' in entry) {
+    if ('name' in entry && 'dateOfBirth' in entry && 'gender' in entry && 'occupation' in entry && 'ssn' in entry && 'entries' in entry) {
         const newPatient = {
             name: parseName(entry.name),
             dateOfBirth: parseDateOfBirth(entry.dateOfBirth),
             gender: parseGender(entry.gender),
             occupation: parseOccupation(entry.occupation),
             ssn: parseSsn(entry.ssn),
+            entries: parseEntries(entry.entries)
         };
         return newPatient;
     }
