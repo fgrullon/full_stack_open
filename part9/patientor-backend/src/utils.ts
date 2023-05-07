@@ -19,6 +19,7 @@ const isGender = (param: string): param is Gender => {
 
 const isEntries = (param: unknown): param is Entry[] => {
     if (Array.isArray(param)) {
+        console.log(param.every(it => it instanceof Entry))
         return param.every(it => it instanceof Entry)
     }
     return false;
@@ -67,6 +68,7 @@ const parseOccupation = (occupation: unknown): string => {
 }
 
 const parseEntries = (entries: any[]): Entry[] => {
+    console.log(!entries , !isEntries(entries) , !Array.isArray(entries))
     if(!entries || !isEntries(entries) || !Array.isArray(entries)){
         throw new Error('Incorrect or missing entries');
     }
