@@ -73,7 +73,7 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
             <TableRow key={patient.id}>
               <TableCell
                 onClick={() => openPatient(patient.id)}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", fontWeight : 'bold' }}
               >{patient.name}</TableCell>
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>

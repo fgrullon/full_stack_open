@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import patientService from '../../services/patients'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { isString } from '../../utils';
+import FemaleIcon from '@mui/icons-material/Female';
+import MaleIcon from '@mui/icons-material/Male';
 
 const PatientInfoPage = () => {
     const [patient, setPatient] = useState<Patient>();
@@ -31,7 +33,7 @@ const PatientInfoPage = () => {
   
     return (
         <div>
-          <h1>{patient.name}</h1>
+          <h1>{patient.name} {patient.gender === 'male' ? <MaleIcon /> : <FemaleIcon /> }</h1>
 
           <p>ssn:{patient.ssn}</p>
           <p>ssn:{patient.occupation}</p>
