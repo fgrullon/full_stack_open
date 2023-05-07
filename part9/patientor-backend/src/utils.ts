@@ -69,7 +69,6 @@ const parseOccupation = (occupation: unknown): string => {
 }
 
 const parseEntries = (entries: any[]): Entry[] => {
-    console.log(!entries , !isEntries(entries) , !Array.isArray(entries))
     if(!entries || !isEntries(entries) || !Array.isArray(entries)){
         throw new Error('Incorrect or missing entries');
     }
