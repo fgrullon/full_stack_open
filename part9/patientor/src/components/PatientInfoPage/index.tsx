@@ -5,6 +5,7 @@ import { useMatch, useNavigate } from 'react-router-dom'
 import { isString } from '../../utils';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
+import EntryPage from '../EntryPage';
 
 const PatientInfoPage = () => {
     const [patient, setPatient] = useState<Patient>();
@@ -37,6 +38,7 @@ const PatientInfoPage = () => {
 
           <p>ssn:{patient.ssn}</p>
           <p>ssn:{patient.occupation}</p>
+          {patient.entries && patient.entries.map( e  => <EntryPage key={e.id} entry={e} />)}
         </div>
     )
 
