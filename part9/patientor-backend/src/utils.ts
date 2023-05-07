@@ -1,9 +1,6 @@
 
-import { NewPatientType, Gender, NonSensitivePatientEntry, PatientType } from './types';
+import { NewPatientType, Gender, NonSensitivePatientEntry, PatientType, Entry } from './types';
 
-class Entry {
-
-}
 
 const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;
@@ -19,11 +16,15 @@ const isGender = (param: string): param is Gender => {
 
 const isEntries = (param: unknown): param is Entry[] => {
     if (Array.isArray(param)) {
-        console.log(param.every(it => it instanceof Entry))
-        return param.every(it => it instanceof Entry)
+        return param.every(it => {
+            return (it as Entry).id && (it as Entry).description && (it as Entry).date && (it as Entry).id && (it as Entry).specialist && (it as Entry).diagnosisCodes && (it as Entry).type
+        });
     }
     return false;
+ 
 }
+
+
 
 const parseId = (id: unknown): string => {
     if(!id || !isString(id)){
