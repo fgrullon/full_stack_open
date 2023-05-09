@@ -1,5 +1,5 @@
 
-import { NewPatientType, Gender, NonSensitivePatientEntry, PatientType, Entry } from './types';
+import { DiagnoseType, NewPatientType, Gender, NonSensitivePatientEntry, PatientType, Entry } from './types';
 
 
 const isString = (text: unknown): text is string => {
@@ -38,6 +38,13 @@ const parseName = (name: unknown): string => {
         throw new Error('Incorrect or missing name');
     }
     return name;
+}
+
+const parseCode = (code: unknown): string => {
+    if(!code || !isString(code)){
+        throw new Error('Incorrect or missing code');
+    }
+    return code;
 }
 
 const parseDateOfBirth = (dateOfBirth: unknown): string => {
@@ -144,4 +151,27 @@ export const nonSensitivePatientEntry = ( entry: unknown ) : NonSensitivePatient
     throw new Error('Incorrect or missing data');
 
 }
+
+export const DiagnoseCheck = ( diagnose: unknown ) : DiagnoseType => {
+    if( !diagnose || typeof diagnose !== 'object' ){
+        throw new Error('Incorrect or missing data');
+    }
+
+    if('code' in diagnose && 'name' in diagnose ){
+
+        const Diagnose: DiagnoseType = {
+            name : parseName(diagnose.name),
+            code : parseCode(diagnose.code),
+        }
+
+        return Diagnose;
+
+    }
+
+    throw new Error('Incorrect or missing data');
+
+}
+
+
+
 

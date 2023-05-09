@@ -1,8 +1,10 @@
 import { Patient } from "../../types";
 import { useState, useEffect } from 'react';
-import patientService from '../../services/patients'
+import patientService from '../../services/patientService'
+import diagnoseService from '../../services/diagnoseService'
+
 import { useMatch, useNavigate } from 'react-router-dom'
-import { isString } from '../../utils';
+import { isString, getDiagnoseDescription } from '../../utils';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import EntryPage from '../EntryPage';
@@ -18,7 +20,13 @@ const PatientInfoPage = () => {
       const fetchPatient = async () => {
         if(isString(id)){
           const p = await patientService.getById(id);
-          if(p) setPatient(p);
+          if(p){
+            setPatient(p);
+            if(patient && patient.entries.length > 0){
+              patient.entries.map(e => getDiagnoseDescription(e.diagnosisCodes))
+            }
+          }
+          
         }else{
           navigate('/')
         }
