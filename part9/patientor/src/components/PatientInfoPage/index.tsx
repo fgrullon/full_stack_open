@@ -1,7 +1,6 @@
 import { Patient } from "../../types";
 import { useState, useEffect } from 'react';
 import patientService from '../../services/patientService'
-import diagnoseService from '../../services/diagnoseService'
 
 import { useMatch, useNavigate } from 'react-router-dom'
 import { isString, getDiagnoseDescription } from '../../utils';
@@ -15,6 +14,8 @@ const PatientInfoPage = () => {
     const match = useMatch('/patients/:id');
     let id = match ? match.params.id : null;
 
+
+
     useEffect(() => {
   
       const fetchPatient = async () => {
@@ -22,9 +23,7 @@ const PatientInfoPage = () => {
           const p = await patientService.getById(id);
           if(p){
             setPatient(p);
-            if(patient && patient.entries.length > 0){
-              patient.entries.map(e => getDiagnoseDescription(e.diagnosisCodes))
-            }
+
           }
           
         }else{
@@ -35,6 +34,8 @@ const PatientInfoPage = () => {
       void fetchPatient();
 
     }, []);
+
+
     
     if(!patient){
       return null;
