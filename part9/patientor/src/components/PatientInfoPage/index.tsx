@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import patientService from '../../services/patientService'
 
 import { useMatch, useNavigate } from 'react-router-dom'
-import { isString, getDiagnoseDescription } from '../../utils';
+import { isString } from '../../utils';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import EntryPage from '../EntryPage';

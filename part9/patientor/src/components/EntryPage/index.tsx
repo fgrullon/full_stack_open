@@ -13,38 +13,21 @@ const EntryPage = ({ entry }: Props) => {
 
     const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
 
+    const updateDiagnoses = async (codes: string[]) => {
+        const newCodes: Diagnosis[] = [];
+        codes.forEach(code =>  await diagnoseService.getByCode(code).then(r => newCodes.push(r)));
 
-    if(patient && patient.entries.length > 0){
-        patient.entries.map(e => updateDiagnoses(e.diagnosisCodes));
-      }
-
-    const updateDiagnoses = (codes: unknown) => {
-        if (Array.isArray(codes) && codes.length > 0) {
-          codes.map(code => {
-            diagnoseService.getByCode(code).then(r => setDiagnoses([...diagnoses, r]));
-            
-          });
-      }
-        console.log('frank', diagnoses)
+        setDiagnoses(newCodes)
     }
 
-
     useEffect(() => {
+
+ 
   
-        const fetchDiagnoses = async () => {
-          if(isString(id)){
-            const p = await diagnoseService.getByCode(id);
-            if(p){
-                setDiagnoses(p);
-  
-            }
-            
-          }else{
-            navigate('/')
-          }
-        };
-  
-        void fetchDiagnoses();
+        if (Array.isArray(entry.diagnosisCodes) && entry.diagnosisCodes.length > 0) {
+            void updateDiagnoses(entry.diagnosisCodes)
+        }
+        
   
       }, []);
   
@@ -60,7 +43,7 @@ const EntryPage = ({ entry }: Props) => {
             <ul>
                 { 
                     entry.diagnosisCodes && 
-                    entry.diagnosisCodes.map(d => <li key={d}>{d}</li>) 
+                    diagnoses.map(d => <li key={d.code}>{d.code} - {d.name}</li>) 
                 }
             </ul>
         </>
