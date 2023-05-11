@@ -45,8 +45,9 @@ const PatientInfoPage = () => {
         <div>
           <h1>{patient.name} {patient.gender === 'male' ? <MaleIcon /> : <FemaleIcon /> }</h1>
 
-          <p>ssn:{patient.ssn}</p>
-          <p>ssn:{patient.occupation}</p>
+          <p>ssn: {patient.ssn}</p>
+          <p>occupation: {patient.occupation}</p>
+          <h2>entries</h2>
           {patient.entries && patient.entries.map( e  => <EntryPage key={e.id} entry={e} />)}
         </div>
     )
