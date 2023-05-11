@@ -17,7 +17,7 @@ const isGender = (param: string): param is Gender => {
 const isEntries = (param: unknown): param is Entry[] => {
     if (Array.isArray(param)) {
         return param.every(it => {
-            return (it as Entry).id && (it as Entry).description && (it as Entry).date && (it as Entry).id && (it as Entry).specialist && (it as Entry).diagnosisCodes && (it as Entry).type
+            return (it as Entry).id && (it as Entry).description && (it as Entry).date && (it as Entry).id && (it as Entry).specialist && (it as Entry).type
         });
     }
     return false;
