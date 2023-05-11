@@ -1,5 +1,4 @@
 import diagnoseService from './services/diagnoseService'
-import { Diagnosis } from "./types";
 
 export const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;

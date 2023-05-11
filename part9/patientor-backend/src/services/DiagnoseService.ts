@@ -11,7 +11,17 @@ const getDiagnose = (code: string): DiagnoseType => {
     return DiagnoseCheck(diagnose[0]);
 }
 
+const getDiagnosesByCode = (codes: string[]): DiagnoseType[] => {
+    const diagnoses = Diagnose.filter(d => codes.includes(d.code));
+    if(diagnoses.every(d => DiagnoseCheck(d))){
+        return diagnoses;
+    }else{
+        throw new Error('Incorrect or missing data');
+    }
+}
+
 export default {
     getDiagnoses,
-    getDiagnose
+    getDiagnose,
+    getDiagnosesByCode
 }
