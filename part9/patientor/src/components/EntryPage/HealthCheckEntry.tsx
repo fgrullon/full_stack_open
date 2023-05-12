@@ -1,11 +1,11 @@
-import { HospitalEntry as HospitalType, Diagnosis } from '../../types';
+import { HealthCheckEntry as HealthCheckType, Diagnosis } from '../../types';
 
 interface Props {
-    entry: HospitalType;
+    entry: HealthCheckType;
     diagnoses: Diagnosis[];
 }
   
-const HospitalEntry = ({ entry, diagnoses }: Props) => {
+const HealthCheckEntry = ({ entry, diagnoses }: Props) => {
 
     return (
         <div
@@ -19,7 +19,7 @@ const HospitalEntry = ({ entry, diagnoses }: Props) => {
                 {entry.date} 
             </div>
             <div>{entry.description}</div>
-            <div>{entry.discharge.date} {entry.discharge.criteria}</div>
+            <div>{entry.healthCheckRating}</div>
             <ul>
                 { 
                     diagnoses.map(d => <li key={d.code}>{d.code} - {d.name}</li>) 
@@ -30,4 +30,4 @@ const HospitalEntry = ({ entry, diagnoses }: Props) => {
     )
 }
 
-export default HospitalEntry;
+export default HealthCheckEntry;

@@ -19,6 +19,7 @@ const OccupationalEntry = ({ entry, diagnoses }: Props) => {
                 {entry.date} 
             </div>
             <div>{entry.description}</div>
+            <div>{entry.employerName} Sickleave {entry.sickLeave?.startDate} - {entry.sickLeave?.endDate}</div>
             <ul>
                 { 
                     diagnoses.map(d => <li key={d.code}>{d.code} - {d.name}</li>) 
