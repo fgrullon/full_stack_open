@@ -4,6 +4,7 @@ import { Diagnosis } from "../../types";
 import diagnoseService from '../../services/diagnoseService'
 import { useState, useEffect } from 'react';
 import HospitalEntry from '../EntryPage';
+import OccupationalEntry from '../EntryPage';
 
 interface Props {
     entry: Entry;
@@ -33,8 +34,9 @@ const EntryPage = ({ entry }: Props) => {
 
     switch (entry.type) {
         case 'Hospital':
-            return <HospitalEntry entry={entry}/>
-    
+            return <HospitalEntry entry={entry} />
+        case 'OccupationalHealthcare':
+            return <OccupationalEntry entry={entry} />
         default:
             break;
     }

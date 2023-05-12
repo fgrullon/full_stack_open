@@ -1,11 +1,11 @@
-import { HospitalEntry as HospitalType, Diagnosis } from '../../types';
+import { OccupationalHealthcareEntry, Diagnosis } from '../../types';
 
 interface Props {
-    entry: HospitalType;
+    entry: OccupationalHealthcareEntry;
     diagnoses: Diagnosis[];
 }
   
-const HospitalEntry = ({ entry, diagnoses }: Props) => {
+const OccupationalEntry = ({ entry, diagnoses }: Props) => {
 
     return (
         <div
@@ -29,4 +29,4 @@ const HospitalEntry = ({ entry, diagnoses }: Props) => {
     )
 }
 
-export default HospitalEntry;
+export default OccupationalEntry;
