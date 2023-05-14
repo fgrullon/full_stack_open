@@ -8,15 +8,18 @@ import {
     Entry, 
     EntryWithoutId,
     EntryType,
-    HospitalEntry,
-    OccupationalHealthcareEntry,
-    HealthCheckEntry,
+    SickLeave,
+    HealthCheckRating,
     Discharge
 } from './types';
 
 
 const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;
+}
+
+const isNumber = (number: unknown): number is number => {
+    return typeof number === 'number' || number instanceof Number;
 }
 
 const isDate = (date: string): boolean => {
@@ -37,8 +40,6 @@ const isEntries = (param: unknown): param is Entry[] => {
  
 }
 
-
-
 const parseId = (id: unknown): string => {
     if(!id || !isString(id)){
         throw new Error('Incorrect or missing id');
@@ -51,6 +52,13 @@ const parseName = (name: unknown): string => {
         throw new Error('Incorrect or missing name');
     }
     return name;
+}
+
+const parseEmployerName = (employerName : unknown): string => {
+    if(!employerName || !isString(employerName)){
+        throw new Error('Incorrect or missing employer name');
+    }
+    return employerName;
 }
 
 const parseCode = (code: unknown): string => {
@@ -95,16 +103,16 @@ const parseEntries = (entries: any[]): Entry[] => {
     return entries;
 }
 
-const isEntryType = (param: string): param is EntryType => {
-    return Object.values(EntryType).map(v => v.toString()).includes(param);
-}
+// const isEntryType = (param: string): param is EntryType => {
+//     return Object.values(EntryType).map(v => v.toString()).includes(param);
+// }
 
-const parseEntryType = (type: any): EntryType => {
-    if(!type || !isEntryType(type) || !Array.isArray(type)){
-        throw new Error('Incorrect or missing entry type');
-    }
-    return type;
-}
+// const parseEntryType = (type: any): EntryType => {
+//     if(!type || !isEntryType(type) || !Array.isArray(type)){
+//         throw new Error('Incorrect or missing entry type');
+//     }
+//     return type;
+// }
 
 const parseDescription = (description: unknown): string => {
     if(!description || !isString(description)){
@@ -139,6 +147,34 @@ const parseDischarge = (discharge: unknown): Discharge => {
 
         return newDischarge;
     }
+
+    throw new Error('Incorrect or missing data');
+
+
+}
+
+const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
+    if( !rating || !isNumber(rating)){
+        throw new Error('Incorrect or missing data');
+    }
+    
+    return rating;
+}
+
+const parseSickLeave = (sickLeave: unknown): SickLeave => {
+    if( !sickLeave || typeof sickLeave !== 'object' ){
+        throw new Error('Incorrect or missing data');
+    }
+    if('startDate' in sickLeave && 'endDate' in sickLeave){
+        const newSickLeave: SickLeave = {
+            startDate : parseDate(sickLeave.startDate),
+            endDate : parseDate(sickLeave.endDate)
+        }
+
+        return newSickLeave;
+    }
+
+    throw new Error('Incorrect or missing data');
 
 }
 
@@ -264,14 +300,14 @@ export const newEntry = ( entry: unknown ) : EntryWithoutId => {
 }
 
 
-const parseHospitalEntry = (entry: unknown):HospitalEntry => {
+const parseHospitalEntry = (entry: unknown):EntryWithoutId => {
     if( !entry || typeof entry !== 'object' ){
         throw new Error('Incorrect or missing data');
     }
 
     if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry && 'discharge' in entry ){
 
-        const newEntry: HospitalEntry = {
+        const newEntry: EntryWithoutId = {
             date : parseName(entry.date),
             type : EntryType.Hospital,
             description : parseDescription(entry.description),
@@ -283,9 +319,52 @@ const parseHospitalEntry = (entry: unknown):HospitalEntry => {
 
     }
 
- 
-    return entry as HospitalEntry
+    throw new Error('Incorrect or missing data');
 
 };
-const parseHealthCheckEntry = (entry: unknown):HealthCheckEntry => entry as HealthCheckEntry;
-const parseOccupationalHealthcareEntry = (entry: unknown):OccupationalHealthcareEntry => entry as OccupationalHealthcareEntry;
+
+const parseHealthCheckEntry = (entry: unknown):EntryWithoutId => {
+    if( !entry || typeof entry !== 'object' ){
+        throw new Error('Incorrect or missing data');
+    }
+
+    if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry && 'healthCheckRating' in entry ){
+
+        const newEntry: EntryWithoutId = {
+            date : parseName(entry.date),
+            type : EntryType.HealthCheck,
+            description : parseDescription(entry.description),
+            specialist : parseName(entry.specialist),
+            healthCheckRating: parseHealthCheckRating(entry.healthCheckRating)
+        }
+
+        return newEntry;
+
+    }
+
+    throw new Error('Incorrect or missing data');
+
+};
+
+const parseOccupationalHealthcareEntry = (entry: unknown):EntryWithoutId => {
+    if( !entry || typeof entry !== 'object' ){
+        throw new Error('Incorrect or missing data');
+    }
+
+    if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry && 'employerName' in entry && 'sickLeave' in entry ){
+
+        const newEntry: EntryWithoutId = {
+            date : parseName(entry.date),
+            type : EntryType.OccupationalHealthcare,
+            description : parseDescription(entry.description),
+            specialist : parseName(entry.specialist),
+            employerName: parseEmployerName(entry.employerName),
+            sickLeave : parseSickLeave(entry.sickLeave)
+        }
+        return newEntry;
+
+    }
+
+    throw new Error('Incorrect or missing data');
+
+};
