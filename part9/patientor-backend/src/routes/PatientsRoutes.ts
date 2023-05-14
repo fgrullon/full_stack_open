@@ -27,9 +27,18 @@ router.post('/', (req, res) => {
 })
 
 router.post('/:id/entries', (req, res) => {
-  const newEntry = newEntryParse(req.body);
-  const addedEntry = patientService.addEntry(req.params.id, newEntry)
-  res.json(addedEntry);
+
+  try {
+    const newEntry = newEntryParse(req.body);
+    const addedEntry = patientService.addEntry(req.params.id, newEntry)
+    res.json(addedEntry);
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    res.status(400).send(errorMessage);
+  }
 
 });
 
