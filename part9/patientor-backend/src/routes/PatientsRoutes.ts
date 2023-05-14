@@ -1,6 +1,6 @@
 import express from 'express';
 import patientService from '../services/PatientService';
-import { toNewPatientEntry } from '../utils';
+import { toNewPatientEntry, parseDiagnosisCodes } from '../utils';
 
 const router = express.Router();
 
@@ -25,6 +25,10 @@ router.post('/', (req, res) => {
         res.status(400).send(errorMessage);
       }
 })
+
+router.post('/:id/entries', (req, res) => {
+  parseDiagnosisCodes
+});
 
 export default router;
 

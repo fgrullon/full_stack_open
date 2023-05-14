@@ -1,5 +1,18 @@
 
-import { DiagnoseType, NewPatientType, Gender, NonSensitivePatientEntry, PatientType, Entry } from './types';
+import { 
+    DiagnoseType, 
+    NewPatientType, 
+    Gender, 
+    NonSensitivePatientEntry, 
+    PatientType, 
+    Entry, 
+    EntryWithoutId,
+    EntryType,
+    HospitalEntry,
+    OccupationalHealthcareEntry,
+    HealthCheckEntry,
+    Discharge
+} from './types';
 
 
 const isString = (text: unknown): text is string => {
@@ -80,6 +93,53 @@ const parseEntries = (entries: any[]): Entry[] => {
         throw new Error('Incorrect or missing entries');
     }
     return entries;
+}
+
+const isEntryType = (param: string): param is EntryType => {
+    return Object.values(EntryType).map(v => v.toString()).includes(param);
+}
+
+const parseEntryType = (type: any): EntryType => {
+    if(!type || !isEntryType(type) || !Array.isArray(type)){
+        throw new Error('Incorrect or missing entry type');
+    }
+    return type;
+}
+
+const parseDescription = (description: unknown): string => {
+    if(!description || !isString(description)){
+        throw new Error('Incorrect or missing description');
+    }
+    return description;
+}
+
+const parseDate = (date: unknown): string => {
+    if(!date || !isString(date) || !isDate(date)){
+        throw new Error('Incorrect or missing date: '+ date);
+    }
+    return date;
+}
+
+const parseCriteria = (criteria: unknown): string => {
+    if(!criteria || !isString(criteria)){
+        throw new Error('Incorrect or missing criteria');
+    }
+    return criteria;
+}
+
+const parseDischarge = (discharge: unknown): Discharge => {
+    if( !discharge || typeof discharge !== 'object' ){
+        throw new Error('Incorrect or missing data');
+    }
+    if('date' in discharge && 'criteria' in discharge){
+        const newDischarge: Discharge = {
+            date : parseDate(discharge.date),
+            criteria : parseCriteria(discharge.criteria)
+        }
+
+        return newDischarge;
+    }
+
 }
 
 export const toNewPatientEntry = ( entry: unknown ) : NewPatientType => {
@@ -172,6 +232,60 @@ export const DiagnoseCheck = ( diagnose: unknown ) : DiagnoseType => {
 
 }
 
+export const parseDiagnosisCodes = (object: unknown): Array<DiagnoseType['code']> =>  {
+    if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+      // we will just trust the data to be in correct form
+      return [] as Array<DiagnoseType['code']>;
+    }
+  
+    return object.diagnosisCodes as Array<DiagnoseType['code']>;
+};
+
+export const newEntry = ( entry: unknown ) : EntryWithoutId => {
+    if( !entry || typeof entry !== 'object' ){
+        throw new Error('Incorrect or missing data');
+    }
+
+    if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry ){
+
+        switch (entry.type) {
+            case 'Hospital':
+                return parseHospitalEntry(entry)
+            case 'HealthCheck':
+                return parseHealthCheckEntry(entry)
+            case 'OccupationalHealthcare':
+                return parseOccupationalHealthcareEntry(entry)
+        }
+
+    }
+
+    throw new Error('Incorrect or missing data');
+
+}
 
 
+const parseHospitalEntry = (entry: unknown):HospitalEntry => {
+    if( !entry || typeof entry !== 'object' ){
+        throw new Error('Incorrect or missing data');
+    }
 
+    if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry && 'discharge' in entry ){
+
+        const newEntry: HospitalEntry = {
+            date : parseName(entry.date),
+            type : EntryType.Hospital,
+            description : parseDescription(entry.description),
+            specialist : parseName(entry.specialist),
+            discharge: parseDischarge(entry.discharge)
+        }
+
+        return newEntry;
+
+    }
+
+ 
+    return entry as HospitalEntry
+
+};
+const parseHealthCheckEntry = (entry: unknown):HealthCheckEntry => entry as HealthCheckEntry;
+const parseOccupationalHealthcareEntry = (entry: unknown):OccupationalHealthcareEntry => entry as OccupationalHealthcareEntry;
