@@ -154,8 +154,8 @@ const parseDischarge = (discharge: unknown): Discharge => {
 }
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
-    if( !rating || !isNumber(rating)){
-        throw new Error('Incorrect or missing data');
+    if(!isNumber(rating)){
+        throw new Error('Incorrect or missing data health check rating');
     }
     
     return rating;
@@ -278,7 +278,7 @@ export const parseDiagnosisCodes = (object: unknown): Array<DiagnoseType['code']
 
 export const newEntryParse = ( entry: unknown ) : EntryWithoutId => {
     if( !entry || typeof entry !== 'object' ){
-        throw new Error('Incorrect or missing data');
+        throw new Error('Incorrect or missing data in newEntry');
     }
 
     if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry ){
@@ -294,14 +294,14 @@ export const newEntryParse = ( entry: unknown ) : EntryWithoutId => {
 
     }
 
-    throw new Error('Incorrect or missing data');
+    throw new Error('Incorrect or missing data in newEntry');
 
 }
 
 
 const parseHospitalEntry = (entry: unknown):EntryWithoutId => {
     if( !entry || typeof entry !== 'object' ){
-        throw new Error('Incorrect or missing data');
+        throw new Error('Incorrect or missing data in hospital entry');
     }
 
     if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry && 'discharge' in entry ){
@@ -318,13 +318,13 @@ const parseHospitalEntry = (entry: unknown):EntryWithoutId => {
 
     }
 
-    throw new Error('Incorrect or missing data');
+    throw new Error('Incorrect or missing data in hospital entry');
 
 };
 
 const parseHealthCheckEntry = (entry: unknown):EntryWithoutId => {
     if( !entry || typeof entry !== 'object' ){
-        throw new Error('Incorrect or missing data');
+        throw new Error('Incorrect or missing data in health entry');
     }
 
     if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry && 'healthCheckRating' in entry ){
@@ -341,16 +341,17 @@ const parseHealthCheckEntry = (entry: unknown):EntryWithoutId => {
 
     }
 
-    throw new Error('Incorrect or missing data');
+    throw new Error('Incorrect or missing data in health entry');
 
 };
 
 const parseOccupationalHealthcareEntry = (entry: unknown):EntryWithoutId => {
     if( !entry || typeof entry !== 'object' ){
-        throw new Error('Incorrect or missing data');
+        throw new Error('Incorrect or missing data in occupational entry 1');
     }
 
-    if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry && 'employerName' in entry && 'sickLeave' in entry ){
+    if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry && 'employerName' in entry ){
+
 
         const newEntry: EntryWithoutId = {
             date : parseName(entry.date),
@@ -358,12 +359,23 @@ const parseOccupationalHealthcareEntry = (entry: unknown):EntryWithoutId => {
             description : parseDescription(entry.description),
             specialist : parseName(entry.specialist),
             employerName: parseEmployerName(entry.employerName),
-            sickLeave : parseSickLeave(entry.sickLeave)
         }
+
+        if('sickLeave' in entry){
+            const sickLeave = parseSickLeave(entry.sickLeave)
+            newEntry.sickLeave = sickLeave;
+        }
+
+
+        if('diagnosisCodes' in entry){
+            const diagnosisCodes = parseDiagnosisCodes(newEntry.diagnosisCodes);
+            newEntry.diagnosisCodes = diagnosisCodes;
+        }
+
         return newEntry;
 
     }
 
-    throw new Error('Incorrect or missing data');
+    throw new Error('Incorrect or missing data in occupational entry 2');
 
 };

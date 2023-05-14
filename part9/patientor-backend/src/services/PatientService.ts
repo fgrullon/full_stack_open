@@ -2,7 +2,7 @@
 import Patients from '../data/patients';
 import { PatientType, NonSensitivePatientEntry, NewPatientType, EntryWithoutId, Entry } from '../types';
 import { v1 as uuid } from 'uuid';
-import { nonSensitivePatientEntry, PatientEntry, parseDiagnosisCodes } from '../utils';
+import { nonSensitivePatientEntry, PatientEntry } from '../utils';
 
 const getPatients = (): NonSensitivePatientEntry[] => {
     return Patients.map(patient => nonSensitivePatientEntry(patient) );
@@ -31,10 +31,6 @@ const addEntry = (
     patient_id: string,
     newEntry: EntryWithoutId
     ) : Entry => {
-
-    if('diagnosisCodes' in newEntry){
-        newEntry.diagnosisCodes = parseDiagnosisCodes(newEntry.diagnosisCodes);
-    }
 
     const Entry = {
         id : uuid(),
