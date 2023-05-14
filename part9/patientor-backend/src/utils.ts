@@ -270,14 +270,13 @@ export const DiagnoseCheck = ( diagnose: unknown ) : DiagnoseType => {
 
 export const parseDiagnosisCodes = (object: unknown): Array<DiagnoseType['code']> =>  {
     if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
-      // we will just trust the data to be in correct form
-      return [] as Array<DiagnoseType['code']>;
+        throw new Error('Incorrect or missing data');
     }
   
     return object.diagnosisCodes as Array<DiagnoseType['code']>;
 };
 
-export const newEntry = ( entry: unknown ) : EntryWithoutId => {
+export const newEntryParse = ( entry: unknown ) : EntryWithoutId => {
     if( !entry || typeof entry !== 'object' ){
         throw new Error('Incorrect or missing data');
     }
