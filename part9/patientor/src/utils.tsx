@@ -15,3 +15,5 @@ export const getDiagnoseDescription =  (diagnoses: unknown): string[] => {
 
     return results;
 }
+
+

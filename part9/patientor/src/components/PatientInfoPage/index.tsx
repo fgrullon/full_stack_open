@@ -49,8 +49,16 @@ const PatientInfoPage = () => {
           <p>ssn: {patient.ssn}</p>
           <p>occupation: {patient.occupation}</p>
           <h2>entries</h2>
-          <EntryForm />
-          {patient.entries && patient.entries.map( e  => <EntryPage key={e.id} entry={e} />)}
+          <div style={{ 
+              border : '2px solid black',
+              padding: '5px 5px 50px 5px',
+              marginBottom: '20px'  
+          }}>
+            <EntryForm patient={patient} setPatient={setPatient}/>
+          </div>
+          <div>
+            {patient.entries && patient.entries.map( e  => <EntryPage key={e.id} entry={e} />)}
+          </div>
         </div>
     )
 
