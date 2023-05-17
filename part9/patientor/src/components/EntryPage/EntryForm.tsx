@@ -8,10 +8,19 @@ interface EntryTypeOption{
     label: string;
 }
 
-
 const entryTypeOptions: EntryTypeOption[] = Object.values(EntryType).map(v => ({
     value: v, label: v.toString()
 }));
+
+interface HealthCheckRatingOption{
+    value: HealthCheckRating;
+    label: number;
+}
+
+const healthCheckRatingOptions: HealthCheckRatingOption[] = Object.values(HealthCheckRating).map(v => ({
+    value: v, label: v.toString()
+}));
+
 type Props = {
     patient : Patient,
     setPatient:  React.Dispatch<React.SetStateAction<Patient | undefined>>;
@@ -37,6 +46,17 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
           const selectedType = Object.values(EntryType).find(g => g.toString() === value);
           if (selectedType) {
             setType(selectedType);
+          }
+        }
+    };
+
+    const onHeltCheckRatingChange = (event: SelectChangeEvent<string>) => {
+        event.preventDefault();
+        if ( typeof event.target.value === "string") {
+          const value = event.target.value;
+          const selectedRating = Object.values(HealthCheckRating).find(g => g.toString() === value);
+          if (selectedRating) {
+            setHealthCheckRating(selectedRating);
           }
         }
     };
@@ -113,6 +133,18 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                     onChange={onTypeChange}
                 >
                     {entryTypeOptions.map(option =>
+                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                    )}
+                </Select>
+
+                <InputLabel id="entry-type">Type</InputLabel>
+                <Select
+                    labelId="entry-type"
+                    value={type}
+                    label="Type"
+                    onChange={onHeltCheckRatingChange}
+                >
+                    {healthCheckRatingOptions.map(option =>
                         <MenuItem value={option.value}>{option.label}</MenuItem>
                     )}
                 </Select>
