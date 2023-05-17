@@ -1,8 +1,17 @@
-import {  TextField, InputLabel, Grid, Button, SelectChangeEvent, Radio } from '@mui/material';
+import {  TextField, InputLabel, Grid, Button, SelectChangeEvent, Radio, Select, MenuItem } from '@mui/material';
 import { useState, SyntheticEvent } from 'react';
 import patientService from '../../services/patientService'
 import { Patient, EntryType, HealthCheckRating, Discharge } from '../../types';
 
+interface EntryTypeOption{
+    value: EntryType;
+    label: string;
+}
+
+
+const entryTypeOptions: EntryTypeOption[] = Object.values(EntryType).map(v => ({
+    value: v, label: v.toString()
+}));
 type Props = {
     patient : Patient,
     setPatient:  React.Dispatch<React.SetStateAction<Patient | undefined>>;
@@ -21,6 +30,17 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
     const [sickLeave, setSickLeave] = useState<string>();
 
   
+    const onTypeChange = (event: SelectChangeEvent<string>) => {
+        event.preventDefault();
+        if ( typeof event.target.value === "string") {
+          const value = event.target.value;
+          const selectedType = Object.values(EntryType).find(g => g.toString() === value);
+          if (selectedType) {
+            setType(selectedType);
+          }
+        }
+    };
+
     const prepVars = () => {
         const diagnosisCodes:string[] = codes.split(',');
 
@@ -83,7 +103,21 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                 value={codes}
                 onChange={({ target }) => setCodes(target.value)}
             />
-          </Grid>
+          
+
+                <InputLabel id="entry-type">Type</InputLabel>
+                <Select
+                    labelId="entry-type"
+                    value={type}
+                    label="Type"
+                    onChange={onTypeChange}
+                >
+                    {entryTypeOptions.map(option =>
+                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                    )}
+                </Select>
+                
+        </Grid>
 
           <Grid>
               <Grid item>
