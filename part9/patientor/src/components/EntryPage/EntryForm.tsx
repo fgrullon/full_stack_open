@@ -14,12 +14,13 @@ const entryTypeOptions: EntryTypeOption[] = Object.values(EntryType).map(v => ({
 
 interface HealthCheckRatingOption{
     value: HealthCheckRating;
-    label: number;
+    label: string;
 }
 
-const healthCheckRatingOptions: HealthCheckRatingOption[] = Object.values(HealthCheckRating).map(v => ({
-    value: v, label: v.toString()
-}));
+const healthCheckRatingOptions: HealthCheckRatingOption[] = Object.values(HealthCheckRating).filter((v) => isNaN(Number(v))).map((v,k) => ({ 
+    value : k, label : v.toString()
+}))
+
 
 type Props = {
     patient : Patient,
@@ -38,7 +39,6 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
     const [employerName, setEmployerName] = useState<string>();
     const [sickLeave, setSickLeave] = useState<string>();
 
-  
     const onTypeChange = (event: SelectChangeEvent<string>) => {
         event.preventDefault();
         if ( typeof event.target.value === "string") {
@@ -52,11 +52,12 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
 
     const onHeltCheckRatingChange = (event: SelectChangeEvent<string>) => {
         event.preventDefault();
-        if ( typeof event.target.value === "string") {
+
+        if ( typeof event.target.value !== "string") {
           const value = event.target.value;
-          const selectedRating = Object.values(HealthCheckRating).find(g => g.toString() === value);
-          if (selectedRating) {
-            setHealthCheckRating(selectedRating);
+          const selectedRating = Object.values(HealthCheckRating).find(g => g === value);
+          if (selectedRating && !isNaN(Number(selectedRating))) {
+            setHealthCheckRating(Number(selectedRating));
           }
         }
     };
