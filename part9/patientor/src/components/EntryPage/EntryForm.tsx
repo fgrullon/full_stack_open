@@ -113,20 +113,18 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
             />
  
      
-            <TextField
-                label="Specialist"
-                fullWidth 
-                value={specialist}
-                onChange={({ target }) => setSpecialist(target.value)}
-            />
-            <TextField
-                label="Diagnosis Codes"
-                fullWidth 
-                value={codes}
-                onChange={({ target }) => setCodes(target.value)}
-            />
-          
-
+                <TextField
+                    label="Specialist"
+                    fullWidth 
+                    value={specialist}
+                    onChange={({ target }) => setSpecialist(target.value)}
+                />
+                <TextField
+                    label="Diagnosis Codes"
+                    fullWidth 
+                    value={codes}
+                    onChange={({ target }) => setCodes(target.value)}
+                />
                 <InputLabel id="entry-type">Type</InputLabel>
                 <Select
                     labelId="entry-type"

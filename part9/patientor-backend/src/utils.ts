@@ -320,6 +320,11 @@ const parseHospitalEntry = (entry: unknown):EntryWithoutId => {
             discharge: parseDischarge(entry.discharge)
         }
 
+        if('diagnosisCodes' in entry){
+            const diagnosisCodes = parseDiagnosisCodes(entry.diagnosisCodes);
+            newEntry.diagnosisCodes = diagnosisCodes;
+        }
+
         return newEntry;
 
     }
@@ -341,6 +346,11 @@ const parseHealthCheckEntry = (entry: unknown):EntryWithoutId => {
             description : parseDescription(entry.description),
             specialist : parseName(entry.specialist),
             healthCheckRating: parseHealthCheckRating(entry.healthCheckRating)
+        }
+
+        if('diagnosisCodes' in entry){
+            const diagnosisCodes = parseDiagnosisCodes(entry.diagnosisCodes);
+            newEntry.diagnosisCodes = diagnosisCodes;
         }
 
         return newEntry;
