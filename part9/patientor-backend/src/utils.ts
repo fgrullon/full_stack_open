@@ -163,7 +163,7 @@ const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
 
 const parseSickLeave = (sickLeave: unknown): SickLeave => {
     if( !sickLeave || typeof sickLeave !== 'object' ){
-        throw new Error('Incorrect or missing data');
+        throw new Error('Incorrect sick leave or missing data');
     }
     if('startDate' in sickLeave && 'endDate' in sickLeave){
         const newSickLeave: SickLeave = {
@@ -174,13 +174,13 @@ const parseSickLeave = (sickLeave: unknown): SickLeave => {
         return newSickLeave;
     }
 
-    throw new Error('Incorrect or missing data');
+    throw new Error('Incorrect sick leave or missing data');
 
 }
 
 export const toNewPatientEntry = ( entry: unknown ) : NewPatientType => {
     if( !entry || typeof entry !== 'object' ){
-        throw new Error('Incorrect or missing data');
+        throw new Error('Incorrect new patient entry or missing data');
     }
 
     if('name' in entry && 'dateOfBirth' in entry && 'gender' in entry && 'occupation' in entry && 'ssn' in entry && 'entries' in entry){
@@ -197,13 +197,13 @@ export const toNewPatientEntry = ( entry: unknown ) : NewPatientType => {
         return newPatient;
 
     }
-    throw new Error('Incorrect or missing data');
+    throw new Error('Incorrect new patient entry or missing data');
 
 }
 
 export const PatientEntry = ( entry: unknown ) : PatientType => {
     if( !entry || typeof entry !== 'object' ){
-        throw new Error('Incorrect or missing data');
+        throw new Error('Incorrect patient entry or missing data');
     }
 
     if('id' in entry && 'name' in entry && 'dateOfBirth' in entry && 'gender' in entry && 'occupation' in entry && 'ssn' in entry && 'entries' in entry){
@@ -222,12 +222,12 @@ export const PatientEntry = ( entry: unknown ) : PatientType => {
 
     }
 
-    throw new Error('Incorrect or missing data');
+    throw new Error('Incorrect patient entry or missing data');
 }
 
 export const nonSensitivePatientEntry = ( entry: unknown ) : NonSensitivePatientEntry => {
     if( !entry || typeof entry !== 'object' ){
-        throw new Error('Incorrect or missing data');
+        throw new Error('Incorrect non sensity patient entry or missing data');
     }
 
     if('id' in entry && 'name' in entry && 'dateOfBirth' in entry && 'gender' in entry && 'occupation' in entry && 'ssn' in entry ){
@@ -244,13 +244,12 @@ export const nonSensitivePatientEntry = ( entry: unknown ) : NonSensitivePatient
 
     }
 
-    throw new Error('Incorrect or missing data');
-
+    throw new Error('Incorrect non sensity patient entry or missing data');
 }
 
 export const DiagnoseCheck = ( diagnose: unknown ) : DiagnoseType => {
     if( !diagnose || typeof diagnose !== 'object' ){
-        throw new Error('Incorrect or missing data');
+        throw new Error('Incorrect diagnose or missing data');
     }
 
     if('code' in diagnose && 'name' in diagnose ){
@@ -264,21 +263,28 @@ export const DiagnoseCheck = ( diagnose: unknown ) : DiagnoseType => {
 
     }
 
-    throw new Error('Incorrect or missing data');
+    throw new Error('Incorrect diagnose or missing data');
+}
 
+const isDiagnoseCodes = (param: unknown): Boolean => {
+    if (Array.isArray(param)) {
+        return param.every(it => typeof it === 'string');
+    }
+    return false;
+ 
 }
 
 export const parseDiagnosisCodes = (object: unknown): Array<DiagnoseType['code']> =>  {
-    if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
-        throw new Error('Incorrect or missing data');
+    if (!object || !Array.isArray(object) || !isDiagnoseCodes(object)) {
+        throw new Error('Incorrect diagnose code or missing data');
     }
   
-    return object.diagnosisCodes as Array<DiagnoseType['code']>;
+    return object as Array<DiagnoseType['code']>;
 };
 
 export const newEntryParse = ( entry: unknown ) : EntryWithoutId => {
     if( !entry || typeof entry !== 'object' ){
-        throw new Error('Incorrect or missing data in newEntry');
+        throw new Error('Incorrect new entry or missing data in newEntry');
     }
 
     if('date' in entry && 'type' in entry && 'description' in entry && 'specialist' in entry ){
@@ -294,7 +300,7 @@ export const newEntryParse = ( entry: unknown ) : EntryWithoutId => {
 
     }
 
-    throw new Error('Incorrect or missing data in newEntry');
+    throw new Error('Incorrect new entry or missing data in newEntry');
 
 }
 
@@ -368,7 +374,7 @@ const parseOccupationalHealthcareEntry = (entry: unknown):EntryWithoutId => {
 
 
         if('diagnosisCodes' in entry){
-            const diagnosisCodes = parseDiagnosisCodes(newEntry.diagnosisCodes);
+            const diagnosisCodes = parseDiagnosisCodes(entry.diagnosisCodes);
             newEntry.diagnosisCodes = diagnosisCodes;
         }
 
@@ -376,6 +382,6 @@ const parseOccupationalHealthcareEntry = (entry: unknown):EntryWithoutId => {
 
     }
 
-    throw new Error('Incorrect or missing data in occupational entry 2');
+    throw new Error('Incorrect or missing data in occupational entry');
 
 };

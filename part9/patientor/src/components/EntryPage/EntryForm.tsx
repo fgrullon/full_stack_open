@@ -1,7 +1,7 @@
 import {  TextField, InputLabel, Grid, Button, SelectChangeEvent, Select, MenuItem } from '@mui/material';
 import { useState, SyntheticEvent } from 'react';
 import patientService from '../../services/patientService'
-import { Patient, EntryType, HealthCheckRating, Discharge } from '../../types';
+import { Patient, EntryType, HealthCheckRating, Discharge, SickLeave } from '../../types';
 
 interface EntryTypeOption{
     value: EntryType;
@@ -37,7 +37,7 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
     const [healthCheckRating, setHealthCheckRating] = useState<HealthCheckRating>(HealthCheckRating.Healthy);
     const [discharge, setDischarge] = useState<Discharge>({date : '', criteria : ''});
     const [employerName, setEmployerName] = useState<string>();
-    const [sickLeave, setSickLeave] = useState<string>();
+    const [sickLeave, setSickLeave] = useState<SickLeave>({startDate : '', endDate : ''});
 
     const onTypeChange = (event: SelectChangeEvent<string>) => {
         event.preventDefault();
@@ -133,7 +133,7 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                     value={type}
                     label="Type"
                     onChange={onTypeChange}
-                    style={{ width: "100%"}}
+                    fullWidth 
                 >
                     {entryTypeOptions.map(option =>
                         <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
@@ -168,7 +168,7 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                         value={healthCheckRating.toString()}
                         label="Rating"
                         onChange={onHeltCheckRatingChange}
-                        style={{ width: "100%"}}
+                        fullWidth 
                     >
                         {healthCheckRatingOptions.map(option =>
                             <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
@@ -177,20 +177,29 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                 </>
             }
 
-            {type === 'OccupationalHealthcare' &&
+            {type === 'OccupationalHealthcare' &&       
                 <>
-                    <InputLabel id="entry-rating">Healt Check Rating</InputLabel>
-                    <Select
-                        labelId="entry-rating"
-                        value={healthCheckRating.toString()}
-                        label="Rating"
-                        onChange={onHeltCheckRatingChange}
-                        style={{ width: "100%"}}
-                    >
-                        {healthCheckRatingOptions.map(option =>
-                            <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
-                        )}
-                    </Select>
+                    <TextField
+                        label="Employer Name"
+                        type="text"
+                        fullWidth 
+                        value={employerName}
+                        onChange={({ target }) => setEmployerName(target.value)}
+                    />
+                    <TextField
+                        label="Start Date"
+                        type="date"
+                        fullWidth 
+                        value={sickLeave.startDate}
+                        onChange={({ target }) => setSickLeave({...sickLeave, startDate : target.value})}
+                    />
+                    <TextField
+                        label="End Date"
+                        type="date"
+                        fullWidth 
+                        value={sickLeave.endDate}
+                        onChange={({ target }) => setSickLeave({...sickLeave, endDate : target.value})}
+                    />
                 </>
             }
         </Grid>
