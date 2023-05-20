@@ -1,4 +1,4 @@
-import {  TextField, InputLabel, Grid, Button, SelectChangeEvent, Radio, Select, MenuItem } from '@mui/material';
+import {  TextField, InputLabel, Grid, Button, SelectChangeEvent, Select, MenuItem } from '@mui/material';
 import { useState, SyntheticEvent } from 'react';
 import patientService from '../../services/patientService'
 import { Patient, EntryType, HealthCheckRating, Discharge } from '../../types';
@@ -60,6 +60,7 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
             setHealthCheckRating(Number(selectedRating));
           }
         }
+
     };
 
     const prepVars = () => {
@@ -132,21 +133,23 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                     value={type}
                     label="Type"
                     onChange={onTypeChange}
+                    style={{ width: "100%"}}
                 >
                     {entryTypeOptions.map(option =>
-                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                        <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
                     )}
                 </Select>
 
-                <InputLabel id="entry-type">Type</InputLabel>
+                <InputLabel id="entry-rating">Healt Check Rating</InputLabel>
                 <Select
-                    labelId="entry-type"
-                    value={type}
-                    label="Type"
+                    labelId="entry-rating"
+                    value={healthCheckRating.toString()}
+                    label="Rating"
                     onChange={onHeltCheckRatingChange}
+                    style={{ width: "100%"}}
                 >
                     {healthCheckRatingOptions.map(option =>
-                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                        <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
                     )}
                 </Select>
                 
