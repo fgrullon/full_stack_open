@@ -1,7 +1,8 @@
 import {  TextField, InputLabel, Grid, Button, SelectChangeEvent, Select, MenuItem } from '@mui/material';
-import { useState, SyntheticEvent } from 'react';
-import patientService from '../../services/patientService'
-import { Patient, EntryType, HealthCheckRating, Discharge, SickLeave } from '../../types';
+import { useState, SyntheticEvent, useEffect } from 'react';
+import patientService from '../../services/patientService';
+import diagnoseService from '../../services/diagnoseService';
+import { Patient, EntryType, HealthCheckRating, Discharge, SickLeave, Diagnosis } from '../../types';
 
 interface EntryTypeOption{
     value: EntryType;
@@ -31,13 +32,30 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
     const [description, setDescription] = useState<string>('');
     const [date, setDate] = useState<string>('');
     const [specialist, setSpecialist] = useState<string>('');
-    const [codes, setCodes] = useState<string>('');
+    const [codes, setCodes] = useState<Diagnosis['code']>();
     const [type, setType] = useState<EntryType>(EntryType.HealthCheck);
-
+    const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
     const [healthCheckRating, setHealthCheckRating] = useState<HealthCheckRating>(HealthCheckRating.Healthy);
     const [discharge, setDischarge] = useState<Discharge>({date : '', criteria : ''});
     const [employerName, setEmployerName] = useState<string>();
     const [sickLeave, setSickLeave] = useState<SickLeave>({startDate : '', endDate : ''});
+
+    useEffect(() => {
+
+        diagnoseService.getAll().then(d => setDiagnoses(diagnoses.concat(d)));
+
+    }, []);
+
+
+    const onCodesChange = (event: SelectChangeEvent<string>) => {
+        event.preventDefault();
+        if ( typeof event.target.value === "string") {
+          const value = event.target.value;
+          const selectedType = diagnoses.find(g => g.toString() === value);
+          console.log(selectedType)
+          
+        }
+    };
 
     const onTypeChange = (event: SelectChangeEvent<string>) => {
         event.preventDefault();
@@ -64,7 +82,10 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
     };
 
     const prepVars = () => {
-        const diagnosisCodes:string[] = codes.split(',');
+        let diagnosisCodes:string[] = [];
+        if(Array.isArray(codes)){
+             diagnosisCodes = codes;
+        }
 
         switch (type) {
             case 'Hospital':
@@ -119,12 +140,23 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                     value={specialist}
                     onChange={({ target }) => setSpecialist(target.value)}
                 />
-                <TextField
-                    label="Diagnosis Codes"
-                    fullWidth 
-                    value={codes}
-                    onChange={({ target }) => setCodes(target.value)}
-                />
+                {diagnoses && <>
+                    <InputLabel id="diagnoses-code">Diagnoses Codes</InputLabel>
+                    <Select
+                        labelId="diagnoses-code"
+                        value={codes}
+                        label="Diagnose Code"
+                        onChange={onCodesChange}
+                        fullWidth 
+                        multiple
+
+                    >
+                        {diagnoses.map(option =>
+                            <MenuItem key={option.code} value={option.code}>{option.code}</MenuItem>
+                        )}
+                    </Select>
+                </>}
+  
                 <InputLabel id="entry-type">Type</InputLabel>
                 <Select
                     labelId="entry-type"
