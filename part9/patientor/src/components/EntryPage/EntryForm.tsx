@@ -35,7 +35,7 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
     const [type, setType] = useState<EntryType>(EntryType.HealthCheck);
 
     const [healthCheckRating, setHealthCheckRating] = useState<HealthCheckRating>(HealthCheckRating.Healthy);
-    const [discharge, setDischarge] = useState<Discharge>();
+    const [discharge, setDischarge] = useState<Discharge>({date : '', criteria : ''});
     const [employerName, setEmployerName] = useState<string>();
     const [sickLeave, setSickLeave] = useState<string>();
 
@@ -140,19 +140,59 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                     )}
                 </Select>
 
-                <InputLabel id="entry-rating">Healt Check Rating</InputLabel>
-                <Select
-                    labelId="entry-rating"
-                    value={healthCheckRating.toString()}
-                    label="Rating"
-                    onChange={onHeltCheckRatingChange}
-                    style={{ width: "100%"}}
-                >
-                    {healthCheckRatingOptions.map(option =>
-                        <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
-                    )}
-                </Select>
-                
+            {type === 'Hospital' &&
+                <>
+                    <TextField
+                        label="Date"
+                        type="date"
+                        fullWidth 
+                        value={discharge.date}
+                        onChange={({ target }) => setDischarge({...discharge, date : target.value})}
+
+                    />
+                    <TextField
+                        label="Criteria"
+                        type="text"
+                        fullWidth 
+                        value={discharge.criteria}
+                        onChange={({ target }) => setDischarge({...discharge, criteria : target.value})}
+                    />
+                </>  
+            }
+      
+            {type === 'HealthCheck' &&
+                <>
+                    <InputLabel id="entry-rating">Healt Check Rating</InputLabel>
+                    <Select
+                        labelId="entry-rating"
+                        value={healthCheckRating.toString()}
+                        label="Rating"
+                        onChange={onHeltCheckRatingChange}
+                        style={{ width: "100%"}}
+                    >
+                        {healthCheckRatingOptions.map(option =>
+                            <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                        )}
+                    </Select>
+                </>
+            }
+
+            {type === 'OccupationalHealthcare' &&
+                <>
+                    <InputLabel id="entry-rating">Healt Check Rating</InputLabel>
+                    <Select
+                        labelId="entry-rating"
+                        value={healthCheckRating.toString()}
+                        label="Rating"
+                        onChange={onHeltCheckRatingChange}
+                        style={{ width: "100%"}}
+                    >
+                        {healthCheckRatingOptions.map(option =>
+                            <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                        )}
+                    </Select>
+                </>
+            }
         </Grid>
 
           <Grid>
