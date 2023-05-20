@@ -69,16 +69,16 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
         switch (type) {
             case 'Hospital':
                 return { description, date, specialist, diagnosisCodes, type, discharge };
-            case 'OccupationalHealthcare':
-                return { description, date, specialist, diagnosisCodes, type, healthCheckRating };
             case 'HealthCheck':
+                return { description, date, specialist, diagnosisCodes, type, healthCheckRating };
+            case 'OccupationalHealthcare':
                 return { description, date, specialist, diagnosisCodes, type, employerName, sickLeave };
             default:
                 return null
         }
 
     }
-    const handleSubmit = (event: SyntheticEvent) => {
+    const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
 
        const newEntry = prepVars()
@@ -86,11 +86,11 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
         return null
        }
 
-       patientService.addEntry(patient.id, newEntry);
-  
+       const newEntries = await patientService.addEntry(patient.id, newEntry)
+        const updatedPatient = {...patient, entries : patient.entries.concat(newEntries)};
+        setPatient(updatedPatient)
 
     }
-
     return <div>
     <form onSubmit={handleSubmit}>
      

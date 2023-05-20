@@ -11,6 +11,7 @@ import EntryForm from '../EntryPage/EntryForm';
 
 const PatientInfoPage = () => {
     const [patient, setPatient] = useState<Patient>();
+
     const navigate = useNavigate();
     const match = useMatch('/patients/:id');
     let id = match ? match.params.id : null;
