@@ -32,9 +32,9 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
     const [description, setDescription] = useState<string>('');
     const [date, setDate] = useState<string>('');
     const [specialist, setSpecialist] = useState<string>('');
-    const [codes, setCodes] = useState<Diagnosis['code']>();
     const [type, setType] = useState<EntryType>(EntryType.HealthCheck);
     const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+    const [diagnosesCodes, setDiagnosesCodes] = useState<string[]>([]);
     const [healthCheckRating, setHealthCheckRating] = useState<HealthCheckRating>(HealthCheckRating.Healthy);
     const [discharge, setDischarge] = useState<Discharge>({date : '', criteria : ''});
     const [employerName, setEmployerName] = useState<string>();
@@ -51,9 +51,11 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
         event.preventDefault();
         if ( typeof event.target.value === "string") {
           const value = event.target.value;
-          const selectedType = diagnoses.find(g => g.toString() === value);
-          console.log(selectedType)
-          
+          const selectedCode = diagnoses.find(g => g.toString() === value);
+          if(selectedCode){
+            setDiagnosesCodes(diagnosesCodes.concat(selectedCode.code))
+          }
+
         }
     };
 
@@ -83,8 +85,8 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
 
     const prepVars = () => {
         let diagnosisCodes:string[] = [];
-        if(Array.isArray(codes)){
-             diagnosisCodes = codes;
+        if(Array.isArray(diagnosesCodes)){
+             diagnosisCodes = diagnosesCodes;
         }
 
         switch (type) {
@@ -144,11 +146,12 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                     <InputLabel id="diagnoses-code">Diagnoses Codes</InputLabel>
                     <Select
                         labelId="diagnoses-code"
-                        value={codes}
-                        label="Diagnose Code"
-                        onChange={onCodesChange}
-                        fullWidth 
                         multiple
+                        value={diagnosesCodes}
+                        label="Diagnose Code"
+                        // onChange={onCodesChange}
+                        onChange={(e) => setDiagnosesCodes(diagnosesCodes.concat(e.target.value))}
+                        fullWidth 
 
                     >
                         {diagnoses.map(option =>
