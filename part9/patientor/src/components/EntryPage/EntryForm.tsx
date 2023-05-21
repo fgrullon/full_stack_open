@@ -24,11 +24,12 @@ const healthCheckRatingOptions: HealthCheckRatingOption[] = Object.values(Health
 
 
 type Props = {
-    patient : Patient,
-    setPatient:  React.Dispatch<React.SetStateAction<Patient | undefined>>;
+    patient: Patient,
+    setPatient: React.Dispatch<React.SetStateAction<Patient | undefined>>;
+    setError: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
   
-const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
+const EntryForm = ({patient, setPatient, setError}: Props): JSX.Element => {
     const [description, setDescription] = useState<string>('');
     const [date, setDate] = useState<string>('');
     const [specialist, setSpecialist] = useState<string>('');
@@ -41,23 +42,14 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
     const [sickLeave, setSickLeave] = useState<SickLeave>({startDate : '', endDate : ''});
 
     useEffect(() => {
-
-        diagnoseService.getAll().then(d => setDiagnoses(diagnoses.concat(d)));
+        try {
+            diagnoseService.getAll().then(d => setDiagnoses(diagnoses.concat(d)));
+        } catch (error) {
+            setError('Failed to load diagnoses');
+        }
 
     }, []);
 
-
-    const onCodesChange = (event: SelectChangeEvent<string>) => {
-        event.preventDefault();
-        if ( typeof event.target.value === "string") {
-          const value = event.target.value;
-          const selectedCode = diagnoses.find(g => g.toString() === value);
-          if(selectedCode){
-            setDiagnosesCodes(diagnosesCodes.concat(selectedCode.code))
-          }
-
-        }
-    };
 
     const onTypeChange = (event: SelectChangeEvent<string>) => {
         event.preventDefault();
@@ -108,10 +100,14 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
        if(!newEntry){
         return null
        }
+       try {
+            const newEntries = await patientService.addEntry(patient.id, newEntry)
+            const updatedPatient = {...patient, entries : patient.entries.concat(newEntries)};
+            setPatient(updatedPatient)
+       } catch (error) {
+            setError(`Error: ${error}`)
+       }
 
-       const newEntries = await patientService.addEntry(patient.id, newEntry)
-        const updatedPatient = {...patient, entries : patient.entries.concat(newEntries)};
-        setPatient(updatedPatient)
 
     }
     return <div>
@@ -126,6 +122,7 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                 fullWidth 
                 value={date}
                 onChange={({ target }) => setDate(target.value)}
+                InputLabelProps={{ shrink: true }}
             />
             <TextField
                 label="Description"
@@ -146,13 +143,11 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                     <InputLabel id="diagnoses-code">Diagnoses Codes</InputLabel>
                     <Select
                         labelId="diagnoses-code"
+                        label="Diagnoses Codes"
                         multiple
                         value={diagnosesCodes}
-                        label="Diagnose Code"
-                        // onChange={onCodesChange}
                         onChange={(e) => setDiagnosesCodes(diagnosesCodes.concat(e.target.value))}
                         fullWidth 
-
                     >
                         {diagnoses.map(option =>
                             <MenuItem key={option.code} value={option.code}>{option.code}</MenuItem>
@@ -225,6 +220,7 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                         fullWidth 
                         value={sickLeave.startDate}
                         onChange={({ target }) => setSickLeave({...sickLeave, startDate : target.value})}
+                        InputLabelProps={{ shrink: true }}
                     />
                     <TextField
                         label="End Date"
@@ -232,6 +228,7 @@ const EntryForm = ({patient, setPatient}: Props): JSX.Element => {
                         fullWidth 
                         value={sickLeave.endDate}
                         onChange={({ target }) => setSickLeave({...sickLeave, endDate : target.value})}
+                        InputLabelProps={{ shrink: true }}
                     />
                 </>
             }

@@ -8,9 +8,11 @@ import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import EntryPage from '../EntryPage';
 import EntryForm from '../EntryPage/EntryForm';
+import Notification from '../Notification';
 
 const PatientInfoPage = () => {
     const [patient, setPatient] = useState<Patient>();
+    const [error, setError] = useState<string>();
 
     const navigate = useNavigate();
     const match = useMatch('/patients/:id');
@@ -55,7 +57,8 @@ const PatientInfoPage = () => {
               padding: '5px 5px 50px 5px',
               marginBottom: '20px'  
           }}>
-            <EntryForm patient={patient} setPatient={setPatient}/>
+            <Notification error={error} />
+            <EntryForm patient={patient} setPatient={setPatient} setError={setError}/>
           </div>
           <div>
             {patient.entries && patient.entries.map( e  => <EntryPage key={e.id} entry={e} />)}
